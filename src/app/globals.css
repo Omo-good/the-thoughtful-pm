@@ -1,26 +1,155 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
+/*
+ * Brand palette from PRD §4.2.
+ * Deliberate accessibility deviations (PRD §11, WCAG 2.2 AA):
+ *  - muted text uses #6B6660 (the PRD grey #77736E measures 4.26:1 on ivory, below 4.5:1).
+ *    The original grey is kept as --color-muted-brand for non-text use.
+ *  - error text uses clay #9A4E36 (terracotta measures 2.90:1 on ivory).
+ *  - gold and terracotta are used only for rules, borders and decoration, never for text.
+ */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-ivory: #f7f3ed;
+  --color-charcoal: #1f1f1f;
+  --color-gold: #b69d73;
+  --color-teal: #174c48;
+  --color-terracotta: #c77d63;
+  --color-clay: #9a4e36;
+  --color-paper: #ffffff;
+  --color-muted: #6b6660;
+  --color-muted-brand: #77736e;
+  --font-display: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
+  --font-sans: var(--font-inter), Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  html {
+    background: var(--color-ivory);
+    color: var(--color-charcoal);
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    line-height: 1.65;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    font-weight: 500;
+    line-height: 1.15;
+    letter-spacing: -0.005em;
+    text-wrap: balance;
+  }
+
+  h1 { font-size: clamp(2.6rem, 1.6rem + 4.2vw, 4.75rem); }
+  h2 { font-size: clamp(2rem, 1.4rem + 2.2vw, 3rem); }
+  h3 { font-size: clamp(1.35rem, 1.1rem + 0.8vw, 1.75rem); }
+
+  a {
+    color: var(--color-teal);
+    text-underline-offset: 0.2em;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-teal);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  ::selection {
+    background: color-mix(in srgb, var(--color-gold) 35%, transparent);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  .skip-link {
+    position: absolute;
+    left: 1rem;
+    top: -4rem;
+    z-index: 100;
+    background: var(--color-teal);
+    color: var(--color-paper);
+    padding: 0.6rem 1rem;
+    border-radius: 0.375rem;
+    transition: top 150ms ease;
+  }
+  .skip-link:focus {
+    top: 1rem;
+  }
+
+  .eyebrow {
+    font-size: 0.75rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-teal);
+    font-weight: 600;
+  }
+
+  .card {
+    background: var(--color-paper);
+    border: 1px solid color-mix(in srgb, var(--color-gold) 40%, transparent);
+    border-radius: 0.5rem;
+    transition: border-color 200ms ease, transform 200ms ease;
+  }
+  .card:hover {
+    border-color: var(--color-teal);
+  }
+
+  .rule {
+    height: 1px;
+    background: color-mix(in srgb, var(--color-gold) 55%, transparent);
+  }
+
+  /* Long-form article typography for Markdown output */
+  .article-body {
+    font-size: 1.1rem;
+    line-height: 1.8;
+  }
+  .article-body > * + * {
+    margin-top: 1.25em;
+  }
+  .article-body h2 {
+    margin-top: 2.25em;
+    font-size: clamp(1.6rem, 1.3rem + 1vw, 2.1rem);
+  }
+  .article-body h3 {
+    margin-top: 1.75em;
+  }
+  .article-body blockquote {
+    border-left: 2px solid var(--color-gold);
+    padding-left: 1.25rem;
+    font-family: var(--font-display);
+    font-size: 1.35em;
+    font-style: italic;
+    color: var(--color-teal);
+  }
+  .article-body ul,
+  .article-body ol {
+    padding-left: 1.4em;
+  }
+  .article-body ul { list-style: disc; }
+  .article-body ol { list-style: decimal; }
+  .article-body img {
+    border-radius: 0.5rem;
+    width: 100%;
+    height: auto;
+  }
+  .article-body a {
+    text-decoration: underline;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
 }
