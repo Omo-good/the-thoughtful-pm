@@ -7,7 +7,7 @@ const pull = "font-display text-[clamp(1.9rem,3.6vw,3.2rem)] leading-[1.18]";
 
 // Light editorial option: an ivory magazine spread with a serif pull-quote voice,
 // a narrow reading column, and wide images between the text.
-export function CaseStudyEditorial({ project, next }: { project: Project; next: Project | null }) {
+export function CaseStudyEditorial({ project }: { project: Project; next?: Project | null }) {
   const decisions = project.decisions ?? [];
   const userFields = [
     ["Who", project.users?.who],
@@ -19,7 +19,7 @@ export function CaseStudyEditorial({ project, next }: { project: Project; next: 
 
   return (
     <main id="main" className="flex-1 overflow-x-clip bg-ivory text-charcoal">
-      <header className="mx-auto max-w-[1280px] px-6 pb-14 pt-12 md:px-[110px] md:pb-20 md:pt-16">
+      <header className="px-6 pb-14 pt-12 md:px-[110px] md:pb-20 md:pt-16">
         <Link href="/work" className="text-sm text-gold underline underline-offset-8">
           ← All work
         </Link>
@@ -62,14 +62,14 @@ export function CaseStudyEditorial({ project, next }: { project: Project; next: 
         // eslint-disable-next-line @next/next/no-img-element
         <img src={project.hero.src} alt={project.hero.alt} className="block h-auto w-full" />
       ) : (
-        <div className="mx-auto max-w-[1280px] px-6 md:px-[110px]">
+        <div className="px-6 md:px-[110px]">
           <div className="flex h-[240px] items-end bg-sand p-8 md:h-[520px] md:p-12">
             <span className={`${label} text-[#5C5244]`}>Hero image · 2400 × 1350 px minimum</span>
           </div>
         </div>
       )}
 
-      <article className="mx-auto max-w-[1000px] px-6 py-20 md:px-0 md:py-28">
+      <article className="max-w-[1000px] px-6 py-20 md:px-[110px] md:py-28">
         {project.problem ? (
           <section id="problem" className="scroll-mt-24">
             <h2 className={`${label} text-gold-deep`}>Problem</h2>
@@ -107,14 +107,14 @@ export function CaseStudyEditorial({ project, next }: { project: Project; next: 
       </article>
 
       {project.roleImage ? (
-        <div className="mx-auto max-w-[1280px] px-6 md:px-[110px]">
+        <div className="px-6 md:px-[110px]">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={project.roleImage.src} alt={project.roleImage.alt} className="block h-auto w-full" />
         </div>
       ) : null}
 
       {decisions.length > 0 ? (
-        <section id="decisions" className="mx-auto max-w-[1000px] scroll-mt-24 px-6 py-24 md:px-0">
+        <section id="decisions" className="max-w-[1000px] scroll-mt-24 px-6 py-24 md:px-[110px]">
           <h2 className={`${label} text-gold-deep`}>Key decisions</h2>
           <ol className="mt-12 flex flex-col">
             {decisions.map((decision, i) => (
@@ -131,7 +131,7 @@ export function CaseStudyEditorial({ project, next }: { project: Project; next: 
       ) : null}
 
       {project.outcome ? (
-        <section id="outcome" className="mx-auto max-w-[1000px] scroll-mt-24 px-6 pb-24 md:px-0">
+        <section id="outcome" className="max-w-[1000px] scroll-mt-24 px-6 pb-24 md:px-[110px]">
           <h2 className={`${label} text-gold-deep`}>Outcome</h2>
           <p className={`${pull} mt-8 italic text-gold-deep`}>{project.outcome}</p>
         </section>
@@ -139,7 +139,7 @@ export function CaseStudyEditorial({ project, next }: { project: Project; next: 
 
       {hasScreens ? (
         <section id="screens" className="scroll-mt-24 bg-sand py-20 md:py-28">
-          <div className="mx-auto max-w-[1280px] px-6 md:px-[110px]">
+          <div className="px-6 md:px-[110px]">
             <h2 className={`${label} text-gold-deep`}>Product screens</h2>
             <div className="mt-12">
               <ScreenStrip shots={project.screenshots} />
@@ -148,15 +148,6 @@ export function CaseStudyEditorial({ project, next }: { project: Project; next: 
         </section>
       ) : null}
 
-      {next && next.slug !== project.slug ? (
-        <Link href={`/work/${next.slug}`} className="group mx-auto flex max-w-[1280px] flex-col gap-6 px-6 py-24 md:px-[110px]">
-          <span className={`${label} text-gold-deep`}>Next case study</span>
-          <span className="flex items-end justify-between font-display text-[clamp(3rem,8vw,7rem)] leading-none group-hover:text-gold-deep">
-            {next.name}
-            <span className="transition-transform group-hover:translate-x-2">→</span>
-          </span>
-        </Link>
-      ) : null}
     </main>
   );
 }

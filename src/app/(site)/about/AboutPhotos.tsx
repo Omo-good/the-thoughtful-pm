@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type Photo = { src: string; alt: string };
 
@@ -11,6 +11,15 @@ type Photo = { src: string; alt: string };
 export function AboutPhotos({ portrait, second }: { portrait: Photo | null; second: Photo | null }) {
   const [swapped, setSwapped] = useState(false);
   const toggle = () => setSwapped((v) => !v);
+
+  // Slideshow: trade the two photos every few seconds when both are present. Tapping still swaps them.
+  const canRotate = Boolean(portrait && second);
+  useEffect(() => {
+    if (!canRotate) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const id = window.setInterval(() => setSwapped((v) => !v), 5000);
+    return () => window.clearInterval(id);
+  }, [canRotate]);
 
   const front = swapped ? second : portrait;
   const back = swapped ? portrait : second;
