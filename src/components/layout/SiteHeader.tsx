@@ -8,7 +8,7 @@ import { MobileNavigation } from "@/components/navigation/MobileNavigation";
 
 export function SiteHeader() {
   return (
-    <header className="sticky top-0 z-30 border-b border-gold/30 bg-ivory/95 backdrop-blur supports-[backdrop-filter]:bg-ivory/85">
+    <header className="sticky top-0 z-30 border-b border-gold/30 bg-ivory">
       <div className="flex h-[76px] items-center justify-between gap-6 px-6 md:h-auto md:px-[110px] md:py-[30px]">
         <Link href="/" className="font-display text-[22px] font-normal text-charcoal md:text-[26px]" aria-label={`${siteConfig.brandName} home`}>
           The Thoughtful PM<span className="text-gold">.</span>

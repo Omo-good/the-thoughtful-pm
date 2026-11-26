@@ -42,7 +42,7 @@ export function MobileNavigation() {
       <div
         id={panelId}
         hidden={!open}
-        className="fixed inset-x-0 top-[4.25rem] bottom-0 z-40 overflow-y-auto bg-ivory px-5 pb-10 pt-6"
+        className="fixed inset-x-0 bottom-0 top-[77px] z-40 overflow-y-auto bg-ivory px-5 pb-10 pt-6"
       >
         <nav aria-label="Mobile primary">
           <ul className="flex flex-col divide-y divide-gold/40">
@@ -60,7 +60,7 @@ export function MobileNavigation() {
             ))}
           </ul>
         </nav>
-        <Link href={headerCta.href} onClick={close} className="mt-8 flex min-h-12 items-center justify-center rounded-md bg-teal px-6 py-3 font-medium text-paper">
+        <Link href={headerCta.href} onClick={close} className="mt-8 flex min-h-12 items-center justify-center bg-gold px-6 py-3 font-medium text-ivory hover:bg-gold-deep">
           {headerCta.label}
         </Link>
       </div>

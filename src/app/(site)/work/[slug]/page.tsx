@@ -24,9 +24,13 @@ const placeholder = "bg-[linear-gradient(160deg,#E8D9BE,#C9A774)]";
 const bigText = "font-display text-[clamp(1.75rem,3vw,2.5rem)] leading-[1.25]";
 
 // Every section always renders, as on the approved board. Empty fields show the board's bracketed prompts.
-function Section({ id, label, children }: { id: string; label: string; children: React.ReactNode }) {
+function Section({ id, label, empty, children }: { id: string; label: string; empty?: boolean; children: React.ReactNode }) {
   return (
-    <section id={id} aria-labelledby={`${id}-label`} className="scroll-mt-24 grid gap-8 border-t border-[rgba(28,24,19,0.18)] py-14 md:grid-cols-[4fr_8fr] md:gap-20 md:py-20">
+    <section
+      id={id}
+      aria-labelledby={`${id}-label`}
+      className={`scroll-mt-24 grid border-t border-[rgba(28,24,19,0.18)] md:grid-cols-[4fr_8fr] md:gap-20 ${empty ? "gap-3 py-6 md:py-8" : "gap-8 py-14 md:py-20"}`}
+    >
       <span id={`${id}-label`} className={`${kicker} md:pt-2`}>
         {label}
       </span>
@@ -44,9 +48,15 @@ export default async function CaseStudyPage({ params }: { params: Params }) {
   const index = projects.findIndex((p) => p.slug === project.slug);
   const next = projects.length > 1 ? projects[(index + 1) % projects.length] : null;
 
+  // Only sections with content are shown, so no empty blocks are left on the page.
   const decisions = project.decisions ?? [];
-  // The approved board shows three decision rows, so pad with placeholders up to three.
-  const decisionRows = Array.from({ length: Math.max(3, decisions.length) }, (_, i) => decisions[i] ?? { title: "[Decision]", why: "[Why it was made.]" });
+  const userFields = [
+    ["Who", project.users?.who],
+    ["Objective", project.users?.objective],
+    ["Measure", project.users?.measure],
+  ].filter((field): field is [string, string] => Boolean(field[1]));
+  const hasRole = Boolean(project.myRole || project.roleImage);
+  const hasScreens = project.screenshots.length > 0;
 
   const jump: [string, string][] = [
     ["problem", "Problem"],
@@ -119,28 +129,26 @@ export default async function CaseStudyPage({ params }: { params: Params }) {
       )}
 
       <div className="px-6 md:px-[110px]">
-        <Section id="problem" label="Problem">
-          <p className={bigText}>{project.problem || "[What was not working, in one or two sentences.]"}</p>
+        <Section id="problem" label="Problem" empty={!project.problem}>
+          {project.problem ? <p className={bigText}>{project.problem}</p> : null}
         </Section>
 
-        <Section id="users" label="Users and goals">
-          <dl className="grid gap-8 md:grid-cols-3">
-            {[
-              ["Who", project.users?.who || "[Target users]"],
-              ["Objective", project.users?.objective || "[Product objective]"],
-              ["Measure", project.users?.measure || "[What success looked like]"],
-            ].map(([label, value]) => (
-              <div key={label}>
-                <dt className={kicker}>{label}</dt>
-                <dd className="mt-3 font-display text-[22px] leading-[1.35]">{value}</dd>
-              </div>
-            ))}
-          </dl>
+        <Section id="users" label="Users and goals" empty={userFields.length === 0}>
+          {userFields.length > 0 ? (
+            <dl className="grid gap-8 md:grid-cols-3">
+              {userFields.map(([label, value]) => (
+                <div key={label}>
+                  <dt className={kicker}>{label}</dt>
+                  <dd className="mt-3 font-display text-[22px] leading-[1.35]">{value}</dd>
+                </div>
+              ))}
+            </dl>
+          ) : null}
         </Section>
 
-        <Section id="role" label="My role">
+        <Section id="role" label="My role" empty={!hasRole}>
           <div className="flex flex-col gap-10">
-            <p className={bigText}>{project.myRole || "[What you personally defined, decided and delivered.]"}</p>
+            {project.myRole ? <p className={bigText}>{project.myRole}</p> : null}
             {project.roleImage ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img src={project.roleImage.src} alt={project.roleImage.alt} className="block h-auto w-full" />
@@ -148,28 +156,22 @@ export default async function CaseStudyPage({ params }: { params: Params }) {
           </div>
         </Section>
 
-        <Section id="decisions" label="Key decisions">
+        <Section id="decisions" label="Key decisions" empty={decisions.length === 0}>
           <ol className="border-t border-[rgba(28,24,19,0.14)]">
-            {decisionRows.map((decision, i) => (
+            {decisions.map((decision, i) => (
               <li key={`${i}-${decision.title}`} className="grid gap-3 border-b border-[rgba(28,24,19,0.14)] py-8 md:grid-cols-[88px_1fr] md:gap-6">
                 <span className="font-display text-[28px] italic text-gold">{String(i + 1).padStart(2, "0")}</span>
                 <div>
                   <h3 className="font-display text-[clamp(1.75rem,2.6vw,2.25rem)] leading-[1.2]">{decision.title}</h3>
-                  <p className="mt-3 text-[17px] leading-[1.7] text-[#4A4034]">{decision.why || "[Why it was made.]"}</p>
+                  {decision.why ? <p className="mt-3 text-[17px] leading-[1.7] text-[#4A4034]">{decision.why}</p> : null}
                 </div>
               </li>
             ))}
           </ol>
         </Section>
 
-        <Section id="screens" label="Product screens">
-          {project.screenshots.length > 0 ? (
-            <ScreenStrip shots={project.screenshots} />
-          ) : (
-            <div className={`flex aspect-[4/3] w-full items-end ${placeholder} p-6 text-[11px] uppercase tracking-[0.2em] text-[#5C5244]`}>
-              Product screen · 1600 × 1200 px minimum
-            </div>
-          )}
+        <Section id="screens" label="Product screens" empty={!hasScreens}>
+          {hasScreens ? <ScreenStrip shots={project.screenshots} /> : null}
         </Section>
 
       </div>
