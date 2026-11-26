@@ -36,7 +36,7 @@ const personJsonLd = {
 };
 
 export default async function AboutPage() {
-  const { about: portrait } = await getPortraits();
+  const { about: portrait, aboutSecond } = await getPortraits();
   return (
     <main id="main" className="flex-1 bg-ivory text-charcoal">
       <JsonLd data={personJsonLd} />
@@ -45,9 +45,13 @@ export default async function AboutPage() {
       <section className="grid gap-10 px-6 pt-16 md:mx-[110px] md:mt-[90px] md:grid-cols-[5fr_7fr] md:gap-[90px] md:px-0 md:pt-0">
         <div className="relative h-[420px] w-full md:h-[720px]">
           <div className="absolute bottom-[-28px] left-[-28px] h-[82%] w-[70%] bg-gold md:bottom-[-28px] md:left-[-28px]" />
+          {aboutSecond ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={aboutSecond.src} alt={aboutSecond.alt} className="absolute bottom-0 left-0 h-[46%] w-[44%] border-[8px] border-ivory object-cover object-[50%_20%]" />
+          ) : null}
           {portrait ? (
             // eslint-disable-next-line @next/next/no-img-element
-            <img src={portrait.src} alt={portrait.alt} className="absolute right-0 top-0 h-[94%] w-[88%] object-cover" />
+            <img src={portrait.src} alt={portrait.alt} className="absolute right-0 top-0 h-[94%] w-[88%] object-cover object-[50%_18%]" />
           ) : (
             <div className="absolute right-0 top-0 flex h-[94%] w-[88%] items-end bg-[linear-gradient(170deg,#E8D9BE,#C9A774)] p-8 md:p-[30px]">
               <span className="font-display text-xl italic text-[#2B2116] md:text-[20px]">

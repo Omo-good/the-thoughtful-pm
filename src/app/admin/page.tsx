@@ -13,9 +13,11 @@ export default async function AdminDashboard() {
   const token = await currentToken();
   if (!token) redirect("/admin/login");
 
-  const projects = (await adminRest<ProjectRow[]>(token, "projects?select=published,cover_url")) ?? [];
-  const services = (await adminRest<ServiceRow[]>(token, "services?select=visible")) ?? [];
-  const settings = (await adminRest<SettingsRow[]>(token, "site_settings?id=eq.1&select=display_name")) ?? [];
+  const [projects, services, settings] = await Promise.all([
+    adminRest<ProjectRow[]>(token, "projects?select=published,cover_url").then((r) => r ?? []),
+    adminRest<ServiceRow[]>(token, "services?select=visible").then((r) => r ?? []),
+    adminRest<SettingsRow[]>(token, "site_settings?id=eq.1&select=display_name").then((r) => r ?? []),
+  ]);
   const firstName = settings[0]?.display_name?.split(" ")[0] || "there";
 
   // Greeting in Lagos time, matching the owner's working day.

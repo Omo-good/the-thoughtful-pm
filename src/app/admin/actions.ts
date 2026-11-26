@@ -174,7 +174,18 @@ export async function saveSettings(formData: FormData) {
     else uploadFailed = true;
   }
 
+  let aboutSecondUrl = String(formData.get("about_second_url_current") ?? "").trim() || null;
+  if (formData.get("clear_about_second") === "on") aboutSecondUrl = null;
+  const aboutSecondFile = fileOf(formData.get("about_second_file"));
+  if (aboutSecondFile) {
+    const url = await uploadCaseImage(token, "site", aboutSecondFile);
+    if (url) aboutSecondUrl = url;
+    else uploadFailed = true;
+  }
+
   const body = {
+    about_second_url: aboutSecondUrl,
+    about_second_alt: String(formData.get("about_second_alt") ?? "").trim() || null,
     portrait_url: portraitUrl,
     portrait_alt: String(formData.get("portrait_alt") ?? "").trim() || null,
     home_portrait_url: homePortraitUrl,

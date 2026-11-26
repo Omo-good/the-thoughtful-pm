@@ -1,5 +1,6 @@
 import { adminRest, requireToken } from "@/lib/admin";
 import { saveSettings } from "../actions";
+import { SaveButton } from "../SaveButton";
 import { Dropzone } from "../Dropzone";
 
 type Settings = {
@@ -9,6 +10,7 @@ type Settings = {
   show_prices: boolean;
   portrait_url: string | null; portrait_alt: string | null;
   home_portrait_url: string | null; home_portrait_alt: string | null;
+  about_second_url: string | null; about_second_alt: string | null;
 };
 
 const kicker = "text-[11px] font-medium uppercase tracking-[0.3em] text-gold";
@@ -34,9 +36,7 @@ export default async function SettingsPage({ searchParams }: { searchParams: Pro
           {error === "save" ? <p className="mt-2 text-sm text-[#9A3B2B]">Settings did not save. Check your connection and try again.</p> : null}
           {error === "upload" ? <p className="mt-2 text-sm text-[#9A3B2B]">Settings saved, but an image did not upload. Try a JPG or PNG under 8 MB.</p> : null}
         </div>
-        <button type="submit" className="inline-flex h-11 items-center bg-gold px-[22px] text-sm font-medium text-ivory hover:bg-gold-deep">
-          Save settings
-        </button>
+        <SaveButton label="Save settings" className="inline-flex h-11 items-center bg-gold px-[22px] text-sm font-medium text-ivory hover:bg-gold-deep" />
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2 lg:items-start">
@@ -112,6 +112,21 @@ export default async function SettingsPage({ searchParams }: { searchParams: Pro
           <label className={label}>
             Alt text
             <input name="portrait_alt" defaultValue={s.portrait_alt ?? ""} className={input} />
+          </label>
+        </div>
+
+        <div className={card}>
+          <h2 className="font-display text-2xl font-normal">Second About image</h2>
+          <input type="hidden" name="about_second_url_current" value={s.about_second_url ?? ""} />
+          <Dropzone src={s.about_second_url} name="about_second_file" empty="Drop a second photo here" />
+          <span className={help}>Shows in the gold block beside the About page portrait, both at once. {s.about_second_url ? "Uploaded." : "Not uploaded yet."}</span>
+          <label className="flex items-center gap-2 text-[13px] font-medium">
+            <input type="checkbox" name="clear_about_second" className="h-4 w-4 accent-gold" />
+            Remove this image
+          </label>
+          <label className={label}>
+            Alt text
+            <input name="about_second_alt" defaultValue={s.about_second_alt ?? ""} className={input} />
           </label>
         </div>
 

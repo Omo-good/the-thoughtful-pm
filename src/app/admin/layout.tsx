@@ -3,6 +3,9 @@ import { signOut } from "./actions";
 import { AdminNav } from "./AdminNav";
 import { currentToken } from "@/lib/admin";
 
+// Run the back office in London, next to the Supabase database, to cut round-trip time.
+export const preferredRegion = "lhr1";
+
 export const metadata: Metadata = {
   title: "Back office",
   robots: { index: false, follow: false },

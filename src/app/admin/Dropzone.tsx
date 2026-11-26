@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, type ChangeEvent } from "react";
 
 const MAX_EDGE = 2400;
-const SHRINK_ABOVE_BYTES = 1024 * 1024;
+const SHRINK_ABOVE_BYTES = 300 * 1024;
 
 /**
  * Shrinks large photos in the browser before they are sent. Server uploads are capped by the host,
@@ -21,7 +21,7 @@ async function shrink(file: File): Promise<File> {
     if (!ctx) return file;
     ctx.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
     bitmap.close();
-    const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, "image/jpeg", 0.88));
+    const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, "image/jpeg", 0.85));
     if (!blob) return file;
     const name = file.name.replace(/\.[^.]+$/, "") + ".jpg";
     return new File([blob], name, { type: "image/jpeg" });

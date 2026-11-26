@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { adminRest, requireToken } from "@/lib/admin";
 import { saveProject } from "../../actions";
 import { Dropzone } from "../../Dropzone";
+import { SaveButton } from "../../SaveButton";
 
 type Decision = { title: string; why: string };
 type Users = { who?: string; objective?: string; measure?: string };
@@ -52,9 +53,7 @@ export default async function EditProject({ params, searchParams }: { params: Pr
             <a href={`/work/${p.slug}`} target="_blank" rel="noreferrer" className="underline underline-offset-4">Preview the case study</a>
           </p>
         </div>
-        <button type="submit" className="inline-flex h-11 items-center bg-gold px-[22px] text-sm font-medium text-ivory hover:bg-gold-deep">
-          Save project
-        </button>
+        <SaveButton label="Save project" className="inline-flex h-11 items-center bg-gold px-[22px] text-sm font-medium text-ivory hover:bg-gold-deep" />
       </div>
 
       <div className="grid gap-6 lg:grid-cols-[1.5fr_1fr] lg:items-start">
@@ -217,9 +216,7 @@ export default async function EditProject({ params, searchParams }: { params: Pr
       </div>
       <div className="sticky bottom-0 -mx-6 flex items-center justify-between gap-4 border-t border-[rgba(28,24,19,0.15)] bg-[#F7F3EA] px-6 py-4 shadow-[0_-6px_18px_rgba(28,24,19,0.06)] md:-mx-14 md:px-14">
         <span className="text-sm text-[#5C5244]">Images upload when you save.</span>
-        <button type="submit" className="inline-flex h-12 items-center bg-gold px-9 text-[15px] font-medium text-ivory hover:bg-gold-deep">
-          Save project
-        </button>
+        <SaveButton label="Save project" className="inline-flex h-12 items-center bg-gold px-9 text-[15px] font-medium text-ivory hover:bg-gold-deep" />
       </div>
     </form>
   );

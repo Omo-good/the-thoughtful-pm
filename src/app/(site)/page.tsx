@@ -67,7 +67,7 @@ export default async function HomePage() {
       {portrait ? (
         <section aria-label="Portrait" className="relative mx-6 mt-16 h-[420px] overflow-hidden md:mx-[110px] md:mt-[140px] md:h-[720px]">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={portrait.src} alt={portrait.alt} className="h-full w-full object-cover" />
+          <img src={portrait.src} alt={portrait.alt} className="h-full w-full object-cover object-[50%_18%]" />
         </section>
       ) : (
         // Placeholder until a portrait is uploaded in Site settings (at least 1600 × 2000 px).

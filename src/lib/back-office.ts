@@ -134,13 +134,20 @@ export async function getShowPrices(): Promise<boolean> {
 }
 
 /** The owner's portraits: one for the About page, one for the homepage. Null when not uploaded. */
-export async function getPortraits(): Promise<{ about: { src: string; alt: string } | null; home: { src: string; alt: string } | null }> {
-  const rows = await rest<{ portrait_url: string | null; portrait_alt: string | null; home_portrait_url: string | null; home_portrait_alt: string | null }[]>(
-    "site_settings?select=portrait_url,portrait_alt,home_portrait_url,home_portrait_alt&id=eq.1",
-  );
+export async function getPortraits(): Promise<{
+  about: { src: string; alt: string } | null;
+  aboutSecond: { src: string; alt: string } | null;
+  home: { src: string; alt: string } | null;
+}> {
+  const rows = await rest<{
+    portrait_url: string | null; portrait_alt: string | null;
+    about_second_url: string | null; about_second_alt: string | null;
+    home_portrait_url: string | null; home_portrait_alt: string | null;
+  }[]>("site_settings?select=portrait_url,portrait_alt,about_second_url,about_second_alt,home_portrait_url,home_portrait_alt&id=eq.1");
   const row = rows?.[0];
   return {
     about: row?.portrait_url ? { src: row.portrait_url, alt: row.portrait_alt ?? "" } : null,
+    aboutSecond: row?.about_second_url ? { src: row.about_second_url, alt: row.about_second_alt ?? "" } : null,
     home: row?.home_portrait_url ? { src: row.home_portrait_url, alt: row.home_portrait_alt ?? "" } : null,
   };
 }
