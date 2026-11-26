@@ -83,3 +83,14 @@ export async function uploadCaseImage(token: string, slug: string, file: File): 
   if (!res.ok) return null;
   return `${URL_BASE}/storage/v1/object/public/${CASE_IMAGE_BUCKET}/${path}`;
 }
+
+/** Writes through the Supabase REST API as the owner. Returns false when the write was refused. */
+export async function adminWrite(token: string, path: string, body: unknown): Promise<boolean> {
+  const res = await fetch(`${URL_BASE}/rest/v1/${path}`, {
+    method: "PATCH",
+    headers: { apikey: KEY, Authorization: `Bearer ${token}`, "Content-Type": "application/json", Prefer: "return=minimal" },
+    body: JSON.stringify(body),
+    cache: "no-store",
+  });
+  return res.ok;
+}

@@ -3,7 +3,7 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
-import { ADMIN_COOKIE, adminRest, requireToken, signInWithPassword, uploadCaseImage } from "@/lib/admin";
+import { ADMIN_COOKIE, adminRest, adminWrite, requireToken, signInWithPassword, uploadCaseImage } from "@/lib/admin";
 
 export async function signIn(formData: FormData) {
   const email = String(formData.get("email") ?? "").trim();
@@ -146,13 +146,10 @@ export async function saveProject(formData: FormData) {
     updated_at: new Date().toISOString(),
   };
 
-  await adminRest(token, `projects?slug=eq.${encodeURIComponent(slug)}`, {
-    method: "PATCH",
-    body,
-    prefer: "return=minimal",
-  });
+  const saved = await adminWrite(token, `projects?slug=eq.${encodeURIComponent(slug)}`, body);
   revalidatePublic();
-  redirect(`/admin/projects/${encodeURIComponent(slug)}?saved=1${uploadFailed ? "&error=upload" : ""}`);
+  const problem = !saved ? "&error=save" : uploadFailed ? "&error=upload" : "";
+  redirect(`/admin/projects/${encodeURIComponent(slug)}?saved=1${problem}`);
 }
 
 export async function saveSettings(formData: FormData) {
@@ -193,9 +190,10 @@ export async function saveSettings(formData: FormData) {
     default_description: String(formData.get("default_description") ?? "").trim() || null,
     updated_at: new Date().toISOString(),
   };
-  await adminRest(token, "site_settings?id=eq.1", { method: "PATCH", body, prefer: "return=minimal" });
+  const saved = await adminWrite(token, "site_settings?id=eq.1", body);
   revalidatePublic();
-  redirect(`/admin/settings?saved=1${uploadFailed ? "&error=upload" : ""}`);
+  const problem = !saved ? "&error=save" : uploadFailed ? "&error=upload" : "";
+  redirect(`/admin/settings?saved=1${problem}`);
 }
 
 export async function saveService(formData: FormData) {

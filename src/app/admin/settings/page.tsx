@@ -31,6 +31,7 @@ export default async function SettingsPage({ searchParams }: { searchParams: Pro
           <span className={kicker}>Configuration</span>
           <h1 className="mt-2 font-display text-[44px] font-normal leading-tight">Site settings</h1>
           {saved && !error ? <p className="mt-2 text-sm text-teal">Settings saved.</p> : null}
+          {error === "save" ? <p className="mt-2 text-sm text-[#9A3B2B]">Settings did not save. Check your connection and try again.</p> : null}
           {error === "upload" ? <p className="mt-2 text-sm text-[#9A3B2B]">Settings saved, but an image did not upload. Try a JPG or PNG under 8 MB.</p> : null}
         </div>
         <button type="submit" className="inline-flex h-11 items-center bg-gold px-[22px] text-sm font-medium text-ivory hover:bg-gold-deep">

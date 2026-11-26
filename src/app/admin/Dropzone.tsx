@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, type ChangeEvent } from "react";
 
 const MAX_EDGE = 2400;
-const SHRINK_ABOVE_BYTES = 1.5 * 1024 * 1024;
+const SHRINK_ABOVE_BYTES = 1024 * 1024;
 
 /**
  * Shrinks large photos in the browser before they are sent. Server uploads are capped by the host,
@@ -62,7 +62,7 @@ export function Dropzone({ src, name, empty, wide = false }: { src: string | nul
     <label className={`relative flex cursor-pointer flex-col items-center justify-center gap-2 overflow-hidden border-[1.5px] border-dashed border-[rgba(154,107,47,0.5)] bg-[#FAF7F0] text-[13px] ${wide ? "h-[150px]" : "h-[170px]"}`}>
       {shown ? (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={shown} alt="" className="h-full w-full object-cover" />
+        <img src={shown} alt="" className="h-full w-full bg-white object-contain" />
       ) : (
         <span className="text-[#5C5244]">{empty}</span>
       )}

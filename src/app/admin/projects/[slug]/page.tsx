@@ -38,6 +38,7 @@ export default async function EditProject({ params, searchParams }: { params: Pr
     <form action={saveProject} className="flex flex-col gap-7">
       <input type="hidden" name="slug" value={p.slug} />
       {saved && !error ? <p className="text-sm text-teal">Project saved.</p> : null}
+      {error === "save" ? <p className="text-sm text-[#9A3B2B]">The project did not save. Check your connection and try again.</p> : null}
       {error === "upload" ? <p className="text-sm text-[#9A3B2B]">Project saved, but an image did not upload. Try a JPG or PNG under 8 MB.</p> : null}
 
       <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
@@ -189,9 +190,10 @@ export default async function EditProject({ params, searchParams }: { params: Pr
             ) : (
               <div className="flex h-[90px] items-center justify-center bg-[#FAF7F0] text-[13px] text-[#5C5244]">No product screens yet</div>
             )}
-            <label className="flex flex-col gap-2 text-[13px] font-medium">
-              Add product screens (up to 8 in total)
-              <input type="file" name="screenshot_files" accept="image/*" multiple className="text-sm" />
+            <label className="inline-flex w-fit cursor-pointer items-center gap-2 border border-gold bg-white px-5 py-3 text-sm font-medium text-charcoal hover:bg-sand">
+              + Add product screens
+              <span className="text-xs font-normal text-[#5C5244]">(up to 8)</span>
+              <input type="file" name="screenshot_files" accept="image/*" multiple className="sr-only" />
             </label>
             <span className={help}>Shows in the Product screens section of the case study page. The first screen is the large one, then two smaller. Minimum 1600 × 1200 px each.</span>
           </div>
@@ -212,6 +214,12 @@ export default async function EditProject({ params, searchParams }: { params: Pr
             </label>
           </div>
         </div>
+      </div>
+      <div className="sticky bottom-0 -mx-6 flex items-center justify-between gap-4 border-t border-[rgba(28,24,19,0.15)] bg-[#F7F3EA] px-6 py-4 shadow-[0_-6px_18px_rgba(28,24,19,0.06)] md:-mx-14 md:px-14">
+        <span className="text-sm text-[#5C5244]">Images upload when you save.</span>
+        <button type="submit" className="inline-flex h-12 items-center bg-gold px-9 text-[15px] font-medium text-ivory hover:bg-gold-deep">
+          Save project
+        </button>
       </div>
     </form>
   );
