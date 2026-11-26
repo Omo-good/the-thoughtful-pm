@@ -3,6 +3,7 @@ import Link from "next/link";
 import { buildMetadata } from "@/lib/metadata";
 import { JsonLd } from "@/components/ui/JsonLd";
 import { siteConfig, absoluteUrl } from "@/data/site-config";
+import { getPortrait } from "@/lib/back-office";
 
 export const metadata: Metadata = buildMetadata({
   title: "About",
@@ -34,7 +35,8 @@ const personJsonLd = {
   url: absoluteUrl("/about"),
 };
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const portrait = await getPortrait();
   return (
     <main id="main" className="flex-1 bg-ivory text-charcoal">
       <JsonLd data={personJsonLd} />
@@ -43,12 +45,17 @@ export default function AboutPage() {
       <section className="grid gap-10 px-6 pt-16 md:mx-[110px] md:mt-[90px] md:grid-cols-[5fr_7fr] md:gap-[90px] md:px-0 md:pt-0">
         <div className="relative h-[420px] w-full md:h-[720px]">
           <div className="absolute bottom-[-28px] left-[-28px] h-[82%] w-[70%] bg-gold md:bottom-[-28px] md:left-[-28px]" />
-          <div className="absolute right-0 top-0 flex h-[94%] w-[88%] items-end bg-[linear-gradient(170deg,#E8D9BE,#C9A774)] p-8 md:p-[30px]">
-            <span className="font-display text-xl italic text-[#2B2116] md:text-[20px]">
-              Portrait
-              <span className="block font-sans text-xs not-italic">1600 × 2000 px minimum</span>
-            </span>
-          </div>
+          {portrait ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={portrait.src} alt={portrait.alt} className="absolute right-0 top-0 h-[94%] w-[88%] object-cover" />
+          ) : (
+            <div className="absolute right-0 top-0 flex h-[94%] w-[88%] items-end bg-[linear-gradient(170deg,#E8D9BE,#C9A774)] p-8 md:p-[30px]">
+              <span className="font-display text-xl italic text-[#2B2116] md:text-[20px]">
+                Portrait
+                <span className="block font-sans text-xs not-italic">1600 × 2000 px minimum</span>
+              </span>
+            </div>
+          )}
         </div>
         <div className="flex flex-col gap-8">
           <span className={kicker}>About</span>

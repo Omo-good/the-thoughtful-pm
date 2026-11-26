@@ -96,9 +96,14 @@ export default async function WorkPage({ searchParams }: WorkPageProps) {
       <section className="mt-10 grid gap-7 px-6 md:mt-12 md:grid-cols-3 md:px-[110px]">
         {pageItems.map((project) => (
           <Link key={project.slug} href={`/work/${project.slug}`} className="group flex flex-col border border-[rgba(28,24,19,0.14)] bg-white">
-            <div className="flex aspect-[16/9] w-full items-end bg-[linear-gradient(120deg,#E8D9BE,#DCC9A6)] p-4 text-[11px] uppercase tracking-[0.2em] text-[#5C5244]">
-              Cover · 2400 × 1350 px
-            </div>
+            {project.cover ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={project.cover} alt="" className="aspect-[16/9] w-full object-cover" />
+            ) : (
+              <div className="flex aspect-[16/9] w-full items-end bg-[linear-gradient(120deg,#E8D9BE,#DCC9A6)] p-4 text-[11px] uppercase tracking-[0.2em] text-[#5C5244]">
+                Cover · 2400 × 1350 px
+              </div>
+            )}
             <div className="flex flex-1 flex-col gap-3 p-7">
               <span className={kicker}>
                 {project.tag} · {project.role}

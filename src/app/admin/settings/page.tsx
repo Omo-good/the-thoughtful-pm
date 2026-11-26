@@ -1,18 +1,19 @@
 import { adminRest, requireToken } from "@/lib/admin";
 import { saveSettings } from "../actions";
+import { Dropzone } from "../Dropzone";
 
 type Settings = {
   display_name: string; brand_name: string; email: string | null; linkedin: string | null;
   notification_email: string | null; open_to_projects: boolean; show_insights: boolean;
   default_description: string | null;
   show_prices: boolean;
+  portrait_url: string | null; portrait_alt: string | null;
 };
 
 const kicker = "text-[11px] font-medium uppercase tracking-[0.3em] text-gold";
 const card = "flex flex-col gap-[18px] bg-white p-7";
 const label = "flex flex-col gap-2 text-[13px] font-medium";
 const input = "w-full border border-[rgba(28,24,19,0.2)] bg-[#FAF7F0] px-3.5 py-2.5 text-sm font-normal text-charcoal";
-const toggle = "flex items-center justify-between gap-4 text-[13px] font-medium";
 const help = "text-xs font-normal text-[#5C5244]";
 
 export default async function SettingsPage({ searchParams }: { searchParams: Promise<{ saved?: string }> }) {
@@ -60,17 +61,29 @@ export default async function SettingsPage({ searchParams }: { searchParams: Pro
 
         <div className={card}>
           <h2 className="font-display text-2xl font-normal">Homepage and Insights</h2>
-          <label className={toggle}>
-            Show that I am open to projects
-            <input type="checkbox" name="open_to_projects" defaultChecked={s.open_to_projects} className="h-4 w-4 accent-gold" />
+          <label className="flex items-center justify-between gap-4 text-sm">
+            <span>Show that I am open to projects</span>
+            <span className="relative inline-flex">
+              <input type="checkbox" name="open_to_projects" defaultChecked={s.open_to_projects} className="peer sr-only" />
+              <span className="bg-[#E8D9BE] px-3 py-1 text-[11px] font-medium text-charcoal peer-checked:hidden">Off</span>
+              <span className="hidden bg-gold px-3 py-1 text-[11px] font-medium text-ivory peer-checked:inline">On</span>
+            </span>
           </label>
-          <label className={toggle}>
-            Show the Insights section
-            <input type="checkbox" name="show_insights" defaultChecked={s.show_insights} className="h-4 w-4 accent-gold" />
+          <label className="flex items-center justify-between gap-4 text-sm">
+            <span>Show the Insights section</span>
+            <span className="relative inline-flex">
+              <input type="checkbox" name="show_insights" defaultChecked={s.show_insights} className="peer sr-only" />
+              <span className="bg-[#E8D9BE] px-3 py-1 text-[11px] font-medium text-charcoal peer-checked:hidden">Off</span>
+              <span className="hidden bg-gold px-3 py-1 text-[11px] font-medium text-ivory peer-checked:inline">On</span>
+            </span>
           </label>
-          <label className={toggle}>
-            Show prices on the services pages
-            <input type="checkbox" name="show_prices" defaultChecked={s.show_prices} className="h-4 w-4 accent-gold" />
+          <label className="flex items-center justify-between gap-4 text-sm">
+            <span>Show prices on the services pages</span>
+            <span className="relative inline-flex">
+              <input type="checkbox" name="show_prices" defaultChecked={s.show_prices} className="peer sr-only" />
+              <span className="bg-[#E8D9BE] px-3 py-1 text-[11px] font-medium text-charcoal peer-checked:hidden">Off</span>
+              <span className="hidden bg-gold px-3 py-1 text-[11px] font-medium text-ivory peer-checked:inline">On</span>
+            </span>
           </label>
           <span className={help}>The Insights section appears once at least one article is published.</span>
         </div>
@@ -81,6 +94,21 @@ export default async function SettingsPage({ searchParams }: { searchParams: Pro
           <label className={label}>
             Notification email
             <input name="notification_email" type="email" defaultValue={s.notification_email ?? ""} className={input} />
+          </label>
+        </div>
+
+        <div className={card}>
+          <h2 className="font-display text-2xl font-normal">Portrait</h2>
+          <input type="hidden" name="portrait_url_current" value={s.portrait_url ?? ""} />
+          <Dropzone src={s.portrait_url} name="portrait_file" empty="Drop a portrait here" />
+          <span className={help}>Shows on the About page. Minimum 1600 × 2000 px. {s.portrait_url ? "Uploaded." : "Not uploaded yet."}</span>
+          <label className="flex items-center gap-2 text-[13px] font-medium">
+            <input type="checkbox" name="clear_portrait" className="h-4 w-4 accent-gold" />
+            Remove the portrait
+          </label>
+          <label className={label}>
+            Portrait alt text
+            <input name="portrait_alt" defaultValue={s.portrait_alt ?? ""} className={input} />
           </label>
         </div>
 

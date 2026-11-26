@@ -1,19 +1,12 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { signOut } from "./actions";
+import { AdminNav } from "./AdminNav";
 import { currentToken } from "@/lib/admin";
 
 export const metadata: Metadata = {
   title: "Back office",
   robots: { index: false, follow: false },
 };
-
-const navItems = [
-  { href: "/admin", label: "Dashboard" },
-  { href: "/admin/projects", label: "Projects" },
-  { href: "/admin/services", label: "Services" },
-  { href: "/admin/settings", label: "Site settings" },
-];
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const signedIn = Boolean(await currentToken());
@@ -29,18 +22,10 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   return (
     <div className="grid min-h-screen bg-ivory text-charcoal md:grid-cols-[240px_1fr]">
       <aside aria-label="Back office navigation" className="flex flex-col gap-1 bg-charcoal px-5 py-8 text-[#EFE6D4]">
-        <p className="mx-2.5 mb-8 font-display text-[22px]">
+        <p className="mx-2.5 mb-10 font-display text-[24px] leading-tight">
           The Thoughtful PM<span className="text-[#D2B98E]">.</span>
         </p>
-        {navItems.map((item) => (
-          <Link
-            key={item.href}
-            href={item.href}
-            className="flex h-10 items-center px-3.5 text-sm text-[#CDBFA6] hover:text-ivory"
-          >
-            {item.label}
-          </Link>
-        ))}
+        <AdminNav />
         <form action={signOut} className="mt-auto">
           <button type="submit" className="flex h-10 w-full items-center px-3.5 text-left text-sm text-[#CDBFA6] hover:text-ivory">
             Sign out

@@ -132,3 +132,10 @@ export async function getShowPrices(): Promise<boolean> {
   if (rows && rows.length > 0) return rows[0].show_prices;
   return siteConfig.pricing.showPrices;
 }
+
+/** The owner's portrait for the About page, or null when none is uploaded. */
+export async function getPortrait(): Promise<{ src: string; alt: string } | null> {
+  const rows = await rest<{ portrait_url: string | null; portrait_alt: string | null }[]>("site_settings?select=portrait_url,portrait_alt&id=eq.1");
+  const row = rows?.[0];
+  return row?.portrait_url ? { src: row.portrait_url, alt: row.portrait_alt ?? "" } : null;
+}

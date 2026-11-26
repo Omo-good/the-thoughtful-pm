@@ -28,6 +28,7 @@ export async function signOut() {
 function revalidatePublic() {
   revalidatePath("/");
   revalidatePath("/work", "layout");
+  revalidatePath("/about");
   revalidatePath("/sitemap.xml");
 }
 
@@ -146,7 +147,15 @@ export async function saveProject(formData: FormData) {
 
 export async function saveSettings(formData: FormData) {
   const token = await requireToken();
+
+  let portraitUrl = String(formData.get("portrait_url_current") ?? "").trim() || null;
+  if (formData.get("clear_portrait") === "on") portraitUrl = null;
+  const portraitFile = fileOf(formData.get("portrait_file"));
+  if (portraitFile) portraitUrl = (await uploadCaseImage(token, "site", portraitFile)) ?? portraitUrl;
+
   const body = {
+    portrait_url: portraitUrl,
+    portrait_alt: String(formData.get("portrait_alt") ?? "").trim() || null,
     display_name: String(formData.get("display_name") ?? "").trim(),
     brand_name: String(formData.get("brand_name") ?? "").trim(),
     email: String(formData.get("email") ?? "").trim() || null,

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { buildMetadata } from "@/lib/metadata";
 import { siteConfig } from "@/data/site-config";
+import { getPortrait } from "@/lib/back-office";
 
 export const metadata: Metadata = buildMetadata({
   title: "The Thoughtful PM | Goodness — Product Manager & Consultant",
@@ -34,7 +35,8 @@ const services = [
 const kicker = "text-[11px] font-medium uppercase tracking-[0.34em] text-gold";
 const link = "text-sm text-gold underline underline-offset-8";
 
-export default function HomePage() {
+export default async function HomePage() {
+  const portrait = await getPortrait();
   return (
     <main id="main" className="flex-1 bg-ivory text-charcoal">
       {/* Hero */}
@@ -62,17 +64,24 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Portrait placeholder: replace with the approved portrait (at least 1600 × 2000 px). */}
-      <section
-        aria-label="Portrait"
-        className="mx-6 mt-16 flex h-[420px] items-end justify-between bg-[linear-gradient(120deg,#E8D9BE_0%,#DCC9A6_60%,#F8F4EC_100%)] p-8 md:mx-[110px] md:mt-[140px] md:h-[720px] md:p-12"
-      >
-        <span className="font-display text-xl italic text-[#4A4034] md:text-[26px]">
-          Portrait · 1600 × 2000 px minimum
-          <span className="mt-1 block font-sans text-xs not-italic md:text-xs">Add your photo, or a studio image at 2400 × 1350 px</span>
-        </span>
-        <span className="hidden text-[11px] font-medium uppercase tracking-[0.34em] text-charcoal md:block">Discovery · Strategy · Delivery</span>
-      </section>
+      {portrait ? (
+        <section aria-label="Portrait" className="relative mx-6 mt-16 h-[420px] overflow-hidden md:mx-[110px] md:mt-[140px] md:h-[720px]">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={portrait.src} alt={portrait.alt} className="h-full w-full object-cover" />
+        </section>
+      ) : (
+        // Placeholder until a portrait is uploaded in Site settings (at least 1600 × 2000 px).
+        <section
+          aria-label="Portrait"
+          className="mx-6 mt-16 flex h-[420px] items-end justify-between bg-[linear-gradient(120deg,#E8D9BE_0%,#DCC9A6_60%,#F8F4EC_100%)] p-8 md:mx-[110px] md:mt-[140px] md:h-[720px] md:p-12"
+        >
+          <span className="font-display text-xl italic text-[#4A4034] md:text-[26px]">
+            Portrait · 1600 × 2000 px minimum
+            <span className="mt-1 block font-sans text-xs not-italic md:text-xs">Add your photo, or a studio image at 2400 × 1350 px</span>
+          </span>
+          <span className="hidden text-[11px] font-medium uppercase tracking-[0.34em] text-charcoal md:block">Discovery · Strategy · Delivery</span>
+        </section>
+      )}
 
       {/* About */}
       <section className="mx-6 mt-20 grid gap-8 md:mx-[110px] md:mt-40 md:grid-cols-[4fr_8fr] md:gap-[100px]">

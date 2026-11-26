@@ -4,6 +4,7 @@ import { adminRest, currentToken } from "@/lib/admin";
 
 type ProjectRow = { published: boolean; cover_url: string | null };
 type ServiceRow = { visible: boolean };
+type SettingsRow = { display_name: string };
 
 const kicker = "text-[11px] font-medium uppercase tracking-[0.3em] text-gold";
 const card = "flex flex-col gap-3 bg-white p-7";
@@ -14,6 +15,12 @@ export default async function AdminDashboard() {
 
   const projects = (await adminRest<ProjectRow[]>(token, "projects?select=published,cover_url")) ?? [];
   const services = (await adminRest<ServiceRow[]>(token, "services?select=visible")) ?? [];
+  const settings = (await adminRest<SettingsRow[]>(token, "site_settings?id=eq.1&select=display_name")) ?? [];
+  const firstName = settings[0]?.display_name?.split(" ")[0] || "there";
+
+  // Greeting in Lagos time, matching the owner's working day.
+  const hour = Number(new Intl.DateTimeFormat("en-GB", { hour: "numeric", hour12: false, timeZone: "Africa/Lagos" }).format(new Date()));
+  const greeting = hour < 12 ? "morning" : hour < 18 ? "afternoon" : "evening";
 
   const live = projects.filter((p) => p.published).length;
   const drafts = projects.length - live;
@@ -25,7 +32,7 @@ export default async function AdminDashboard() {
       <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
         <div>
           <span className={kicker}>Back office</span>
-          <h1 className="mt-2 font-display text-[44px] font-normal leading-tight">Dashboard</h1>
+          <h1 className="mt-2 font-display text-[44px] font-normal leading-tight">Good {greeting}, {firstName}</h1>
         </div>
         <Link href="/admin/projects" className="inline-flex h-11 items-center bg-gold px-[22px] text-sm font-medium text-ivory hover:bg-gold-deep">
           Manage projects
@@ -53,9 +60,12 @@ export default async function AdminDashboard() {
 
       <div className={card}>
         <h2 className="font-display text-2xl font-normal">Next steps</h2>
-        <p className="text-sm text-[#5C5244]">
-          Projects with no cover image yet, and drafts waiting to be published, are listed on the Projects page. Only projects marked Live appear on the public site.
-        </p>
+        <p className="text-sm text-[#5C5244]">Items that need your attention. Only projects marked Live appear on the public site.</p>
+        <ul className="flex flex-col gap-2 pt-2 text-[15px]">
+          <li>Project covers missing: {coversMissing}</li>
+          <li>Drafts waiting to be published: {drafts}</li>
+          <li>Services hidden from the page: {services.length - servicesOnPage}</li>
+        </ul>
       </div>
     </>
   );

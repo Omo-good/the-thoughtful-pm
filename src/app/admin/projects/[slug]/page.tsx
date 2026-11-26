@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { adminRest, requireToken } from "@/lib/admin";
 import { saveProject } from "../../actions";
+import { Dropzone } from "../../Dropzone";
 
 type Decision = { title: string; why: string };
 type Users = { who?: string; objective?: string; measure?: string };
@@ -20,20 +21,6 @@ const input =
   "w-full border border-[rgba(28,24,19,0.2)] bg-[#FAF7F0] px-3.5 py-2.5 text-sm font-normal text-charcoal";
 const help = "text-xs font-normal text-[#5C5244]";
 
-function Dropzone({ src, name, empty, wide = false }: { src: string | null; name: string; empty: string; wide?: boolean }) {
-  return (
-    <label className={`flex cursor-pointer flex-col items-center justify-center gap-2 overflow-hidden border-[1.5px] border-dashed border-[rgba(154,107,47,0.5)] bg-[#FAF7F0] text-[13px] ${wide ? "h-[150px]" : "h-[170px]"}`}>
-      {src ? (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img src={src} alt="" className="h-full w-full object-cover" />
-      ) : (
-        <span className="text-[#5C5244]">{empty}</span>
-      )}
-      <input type="file" name={name} accept="image/*" className="sr-only" />
-      <span className="sr-only">Choose an image file</span>
-    </label>
-  );
-}
 
 export default async function EditProject({ params }: { params: Promise<{ slug: string }> }) {
   const token = await requireToken();
@@ -57,7 +44,8 @@ export default async function EditProject({ params }: { params: Promise<{ slug: 
           </Link>
           <h1 className="mt-2 font-display text-[44px] font-normal leading-tight">{p.name}</h1>
           <p className="mt-1 text-xs text-[#5C5244]">
-            {p.published ? "Live" : "Draft"}. Save here, then publish or unpublish from the Projects list.
+            {p.published ? "Live" : "Draft"}. Save here, then publish or unpublish from the Projects list.{" "}
+            <a href={`/work/${p.slug}`} target="_blank" rel="noreferrer" className="underline underline-offset-4">Preview the case study</a>
           </p>
         </div>
         <button type="submit" className="inline-flex h-11 items-center bg-gold px-[22px] text-sm font-medium text-ivory hover:bg-gold-deep">
@@ -154,7 +142,7 @@ export default async function EditProject({ params }: { params: Promise<{ slug: 
             <h2 className="font-display text-2xl font-normal">Cover image</h2>
             <input type="hidden" name="cover_url" value={p.cover_url ?? ""} />
             <Dropzone src={p.cover_url} name="cover_file" empty="Drop an image here" />
-            <span className={help}>{p.cover_url ? "Uploaded" : "Not uploaded yet"}. Minimum 2400 × 1350 px. Choose a new file to replace it.</span>
+            <span className={help}>Shows as the picture on this project&rsquo;s card on the Work page. {p.cover_url ? "Uploaded." : "Not uploaded yet."} Minimum 2400 × 1350 px.</span>
             <label className={label}>
               Cover alt text
               <input name="cover_alt" defaultValue={p.cover_alt ?? ""} className={input} />
@@ -165,7 +153,7 @@ export default async function EditProject({ params }: { params: Promise<{ slug: 
             <h2 className="font-display text-2xl font-normal">Case study hero</h2>
             <input type="hidden" name="hero_url_current" value={p.hero_url ?? ""} />
             <Dropzone src={p.hero_url} name="hero_file" empty="Drop a full-width image here" wide />
-            <span className={help}>Full-width band at the top of the case study. Minimum 2400 × 1350 px.</span>
+            <span className={help}>Shows as the full-width band at the top of this project&rsquo;s case study page. Minimum 2400 × 1350 px.</span>
             <label className="flex items-center gap-2 text-[13px] font-medium">
               <input type="checkbox" name="clear_hero" className="h-4 w-4 accent-gold" />
               Remove the hero image
@@ -202,7 +190,7 @@ export default async function EditProject({ params }: { params: Promise<{ slug: 
               Add product screens (up to 8 in total)
               <input type="file" name="screenshot_files" accept="image/*" multiple className="text-sm" />
             </label>
-            <span className={help}>Minimum 1600 × 1200 px each. The first two show on the case study.</span>
+            <span className={help}>Shows in the Product screens section of the case study page. The first screen is the large one, then two smaller. Minimum 1600 × 1200 px each.</span>
           </div>
 
           <div className={card}>
