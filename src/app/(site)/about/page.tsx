@@ -45,10 +45,6 @@ export default async function AboutPage() {
       <section className="grid gap-10 px-6 pt-16 md:mx-[110px] md:mt-[90px] md:grid-cols-[5fr_7fr] md:gap-[90px] md:px-0 md:pt-0">
         <div className="relative h-[420px] w-full md:h-[720px]">
           <div className="absolute bottom-[-28px] left-[-28px] h-[82%] w-[70%] bg-gold md:bottom-[-28px] md:left-[-28px]" />
-          {aboutSecond ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={aboutSecond.src} alt={aboutSecond.alt} className="absolute bottom-0 left-0 h-[46%] w-[44%] border-[8px] border-ivory object-cover object-[50%_20%]" />
-          ) : null}
           {portrait ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={portrait.src} alt={portrait.alt} className="absolute right-0 top-0 h-[94%] w-[88%] object-cover object-[50%_18%]" />
@@ -60,6 +56,11 @@ export default async function AboutPage() {
               </span>
             </div>
           )}
+
+          {aboutSecond ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={aboutSecond.src} alt={aboutSecond.alt} className="absolute bottom-[-14px] left-[-14px] z-10 h-[48%] w-[46%] border-[8px] border-ivory object-cover object-[50%_20%] shadow-[0_10px_30px_rgba(28,24,19,0.18)]" />
+          ) : null}
         </div>
         <div className="flex flex-col gap-8">
           <span className={kicker}>About</span>
