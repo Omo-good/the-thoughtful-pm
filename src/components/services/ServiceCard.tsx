@@ -8,11 +8,11 @@ interface ServiceCardProps {
   service: Service;
   showDeliverables?: boolean;
   as?: HeadingLevel;
+  showPrices?: boolean;
 }
 
-export function ServiceCard({ service, showDeliverables = false, as: Heading = "h3" }: ServiceCardProps) {
+export function ServiceCard({ service, showDeliverables = false, as: Heading = "h3", showPrices = siteConfig.pricing.showPrices }: ServiceCardProps) {
   const enquiryHref = `/contact?service=${encodeURIComponent(service.enquiryValue)}`;
-  const showPrices = siteConfig.pricing.showPrices;
   const headingId = `service-${service.slug}`;
 
   return (

@@ -65,7 +65,7 @@ function toMeta(slug: string, data: Record<string, unknown>, body: string): Insi
     title,
     excerpt,
     category: str(data.category),
-    author: str(data.author) || "Arewa",
+    author: str(data.author) || "Goodness",
     publishedAt,
     updatedAt: dateStr(data.updatedAt) || null,
     readingTime: typeof data.readingTime === "number" ? data.readingTime : estimateReadingTime(body),

@@ -7,7 +7,7 @@ const item = (overrides: Partial<InsightMeta>): InsightMeta => ({
   title: "Title",
   excerpt: "Excerpt",
   category: "product-thinking",
-  author: "Arewa",
+  author: "Goodness Omojengbesi",
   publishedAt: "2026-01-01",
   updatedAt: null,
   readingTime: 3,

@@ -8,7 +8,7 @@ import { CTASection } from "@/components/ui/CTASection";
 export const metadata: Metadata = buildMetadata({
   title: "About",
   description:
-    "About Arewa, The Thoughtful PM: a Product Manager and independent consultant on product strategy, discovery, requirements and delivery.",
+    "About Goodness, The Thoughtful PM: a Product Manager and independent consultant on product strategy, discovery, requirements and delivery.",
   path: "/about",
 });
 
@@ -61,7 +61,7 @@ export default function AboutPage() {
       <JsonLd data={breadcrumbJsonLd(crumbs)} />
 
       <section aria-labelledby="about-intro" className="mx-auto max-w-4xl px-5 py-16 sm:px-8">
-        <SectionHeading as="h1" id="about-intro" eyebrow="About" title="Hi, I'm Arewa, your Thoughtful PM." />
+        <SectionHeading as="h1" id="about-intro" eyebrow="About" title="Hi, I'm Goodness, your Thoughtful PM." />
         <p className="mt-8 text-lg text-charcoal/90">
           The Thoughtful PM is the expression of my professional philosophy, experiences and perspectives on building products.
         </p>

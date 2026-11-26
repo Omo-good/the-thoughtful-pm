@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { buildMetadata } from "@/lib/metadata";
-import { projects } from "@/data/projects";
+import { getProjects } from "@/lib/back-office";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Breadcrumbs, breadcrumbJsonLd } from "@/components/ui/Breadcrumbs";
 import { JsonLd } from "@/components/ui/JsonLd";
@@ -9,13 +9,14 @@ import { CTASection } from "@/components/ui/CTASection";
 
 export const metadata: Metadata = buildMetadata({
   title: "Work",
-  description: "Product case studies by Arewa: Everwoven, PrayFirst and GiftWize, covering the problem, strategy, product decisions and outcomes.",
+  description: "Product case studies by Goodness: Everwoven, PrayFirst and Giftwyz.",
   path: "/work",
 });
 
 const crumbs = [{ label: "Home", href: "/" }, { label: "Work" }];
 
-export default function WorkPage() {
+export default async function WorkPage() {
+  const projects = await getProjects();
   return (
     <main id="main" className="flex-1">
       <div className="mx-auto max-w-7xl px-5 pb-6 pt-12 sm:px-8">
@@ -29,7 +30,7 @@ export default function WorkPage() {
           id="work-title"
           eyebrow="Portfolio"
           title="Product work, with the decisions behind it."
-          intro="Each case study explains the problem, the product thinking, my role and what was actually built, so you can see where ownership sat and where other people's implementation took over."
+          intro="Each case study shows my role, the platform and where the product stands today."
         />
         <ul className="mt-14 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           {projects.map((project) => (

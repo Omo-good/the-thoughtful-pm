@@ -1,11 +1,12 @@
 import Link from "next/link";
 import { primaryNavigation } from "@/data/navigation";
-import { services } from "@/data/services";
+import { getServices } from "@/lib/back-office";
 import { siteConfig } from "@/data/site-config";
 import { CopyrightYear } from "@/components/layout/CopyrightYear";
 import { SocialLinks } from "@/components/ui/SocialLinks";
 
-export function SiteFooter() {
+export async function SiteFooter() {
+  const services = await getServices();
   return (
     <footer className="mt-24 border-t border-gold/40 bg-paper">
       <div className="mx-auto grid max-w-7xl gap-12 px-5 py-14 sm:px-8 md:grid-cols-4">

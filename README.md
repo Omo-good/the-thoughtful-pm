@@ -1,6 +1,6 @@
 # The Thoughtful PM
 
-Personal brand, portfolio, insights and consulting website for Arewa, built from the approved PRD (v1.0).
+Personal brand, portfolio, insights and consulting website for Goodness Omojengbesi, built from the approved PRD (v1.0).
 
 - **Stack:** Next.js 16 (App Router) · TypeScript · Tailwind CSS v4 · Lucide React · Markdown insights (gray-matter + marked) · Formspree (server-side)
 - **Status:** MVP implemented and tested locally. **Not deployed.** Commercial production hosting is on hold until a compliant Vercel plan is approved (see [Deployment](#deployment)).
@@ -69,7 +69,7 @@ slug: my-article              # optional, defaults to the file name
 title: My article title       # required
 excerpt: One-line summary.
 category: product-thinking    # see content-categories.ts
-author: Arewa
+author: Goodness Omojengbesi
 publishedAt: 2026-12-01       # required, YYYY-MM-DD
 updatedAt:                    # optional
 readingTime:                  # optional, estimated automatically

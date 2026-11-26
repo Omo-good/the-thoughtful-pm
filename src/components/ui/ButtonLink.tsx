@@ -1,12 +1,13 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 
-type Variant = "primary" | "secondary" | "ghost";
+type Variant = "primary" | "secondary" | "ghost" | "inverse";
 
 const variants: Record<Variant, string> = {
   primary: "bg-teal text-paper hover:bg-charcoal",
   secondary: "border border-teal text-teal hover:bg-teal hover:text-paper",
   ghost: "text-teal underline-offset-4 hover:underline px-0 py-0",
+  inverse: "bg-paper text-teal hover:bg-gold hover:text-charcoal",
 };
 
 interface ButtonLinkProps {

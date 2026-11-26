@@ -2,9 +2,8 @@ import type { Metadata } from "next";
 import { buildMetadata } from "@/lib/metadata";
 import { siteConfig } from "@/data/site-config";
 import { expertise } from "@/data/expertise";
-import { services } from "@/data/services";
-import { projects } from "@/data/projects";
-import { getPublishedInsights } from "@/lib/content";
+import { getProjects, getServices, getShowPrices } from "@/lib/back-office";
+import { getInsightList } from "@/lib/insights-source";
 import { HeroSection } from "@/components/homepage/HeroSection";
 import { IntroSection } from "@/components/homepage/IntroSection";
 import { SectionHeading } from "@/components/ui/SectionHeading";
@@ -16,7 +15,7 @@ import { ButtonLink } from "@/components/ui/ButtonLink";
 import { CTASection } from "@/components/ui/CTASection";
 
 export const metadata: Metadata = buildMetadata({
-  title: "The Thoughtful PM | Arewa — Product Manager & Consultant",
+  title: "The Thoughtful PM | Goodness — Product Manager & Consultant",
   description: siteConfig.description,
   path: "/",
 });
@@ -30,9 +29,12 @@ const principles = [
   "Thoughtful collaboration.",
 ];
 
-export default function HomePage() {
+export default async function HomePage() {
+  const projects = await getProjects();
+  const services = await getServices();
+  const showPrices = await getShowPrices();
   // Only published articles appear, and only the three most recent (PRD §6.1 Section 7).
-  const recentArticles = getPublishedInsights().slice(0, 3);
+  const recentArticles = (await getInsightList()).slice(0, 3);
 
   return (
     <main id="main" className="flex-1">
@@ -72,7 +74,7 @@ export default function HomePage() {
           <ul className="mt-12 grid gap-6 md:grid-cols-2">
             {services.map((service) => (
               <li key={service.slug} className="flex">
-                <ServiceCard service={service} />
+                <ServiceCard service={service} showPrices={showPrices} />
               </li>
             ))}
           </ul>

@@ -12,10 +12,10 @@ function envValue(value: string | undefined): string | null {
 export const siteConfig = {
   brandName: "The Thoughtful PM",
   tagline: "Building products with curiosity, clarity & care.",
-  professionalName: "Arewa",
+  professionalName: "Goodness Omojengbesi",
   professionalTitle: "Product Manager & Consultant",
   description:
-    "Meet Arewa, The Thoughtful PM. Explore Product Management insights, product case studies and consulting services for founders, startups and growing businesses.",
+    "Meet Goodness Omojengbesi, The Thoughtful PM. Explore Product Management insights, product case studies and consulting services for founders, startups and growing businesses.",
   siteUrl: (envValue(process.env.NEXT_PUBLIC_SITE_URL) ?? "https://the-thoughtful-pm.vercel.app").replace(/\/$/, ""),
   email: envValue(process.env.NEXT_PUBLIC_CONTACT_EMAIL),
   linkedinUrl: envValue(process.env.NEXT_PUBLIC_LINKEDIN_URL),

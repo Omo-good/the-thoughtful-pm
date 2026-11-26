@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { buildMetadata } from "@/lib/metadata";
-import { services } from "@/data/services";
+import { getServices, getShowPrices } from "@/lib/back-office";
 import { siteConfig, absoluteUrl } from "@/data/site-config";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Breadcrumbs, breadcrumbJsonLd } from "@/components/ui/Breadcrumbs";
@@ -17,7 +17,10 @@ export const metadata: Metadata = buildMetadata({
 
 const crumbs = [{ label: "Home", href: "/" }, { label: "Services" }];
 
-export default function ServicesPage() {
+export default async function ServicesPage() {
+  const services = await getServices();
+  const showPrices = await getShowPrices();
+
   const serviceJsonLd = {
     "@context": "https://schema.org",
     "@type": "ProfessionalService",
@@ -47,7 +50,7 @@ export default function ServicesPage() {
         <ul className="mt-14 grid gap-6 lg:grid-cols-2">
           {services.map((service) => (
             <li key={service.slug} className="flex">
-              <ServiceCard service={service} showDeliverables as="h2" />
+              <ServiceCard service={service} showDeliverables as="h2" showPrices={showPrices} />
             </li>
           ))}
         </ul>
@@ -55,7 +58,7 @@ export default function ServicesPage() {
           <div>
             <h2 className="text-2xl">How pricing works</h2>
             <p className="mt-3 text-muted">
-              {siteConfig.pricing.showPrices
+              {showPrices
                 ? "Prices shown are indicative starting points, in NGN and USD. They are not converted between currencies."
                 : "Prices are provided on request after a short conversation about your needs."}
             </p>

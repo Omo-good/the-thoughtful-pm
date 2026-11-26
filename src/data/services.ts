@@ -9,7 +9,7 @@ export interface ServicePrice {
 }
 
 export interface Service {
-  slug: "prd-requirements-sprint" | "product-discovery-mvp" | "product-audit" | "fractional-product-management";
+  slug: string;
   name: string;
   shortName: string;
   targetCustomer: string;

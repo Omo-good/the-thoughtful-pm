@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
 import { buildMetadata } from "@/lib/metadata";
-import { getFeaturedInsight, getPublishedInsights, searchInsights } from "@/lib/content";
+import { searchInsights } from "@/lib/content";
+import { getFeaturedInsightMeta, getInsightList } from "@/lib/insights-source";
 import { insightCategories, categoryLabel } from "@/data/content-categories";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Breadcrumbs, breadcrumbJsonLd } from "@/components/ui/Breadcrumbs";
@@ -13,7 +14,7 @@ import { formatDate } from "@/lib/utils";
 
 export const metadata: Metadata = buildMetadata({
   title: "Insights",
-  description: "Product Management lessons, startup realities and reflections on building products, by Arewa.",
+  description: "Product Management lessons, startup realities and reflections on building products, by Goodness.",
   path: "/insights",
 });
 
@@ -45,8 +46,8 @@ async function InsightsResults({ searchParams }: { searchParams: SearchParams })
   const requestedCategory = insightCategories.some((c) => c.slug === params.category) ? params.category : undefined;
   const page = Math.max(1, Number.parseInt(params.page ?? "1", 10) || 1);
 
-  const all = getPublishedInsights();
-  const featured = getFeaturedInsight();
+  const all = await getInsightList();
+  const featured = await getFeaturedInsightMeta();
   const isFiltered = Boolean(q || requestedCategory);
   // The featured article is shown above the grid only when no search or filter is active.
   const pool = !isFiltered && featured ? all.filter((a) => a.slug !== featured.slug) : all;

@@ -3,7 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { buildMetadata } from "@/lib/metadata";
-import { getInsight, getRelatedInsights } from "@/lib/content";
+import { getInsightDetail, getRelatedInsightList } from "@/lib/insights-source";
 import { categoryLabel } from "@/data/content-categories";
 import { formatDate } from "@/lib/utils";
 import { Breadcrumbs, breadcrumbJsonLd } from "@/components/ui/Breadcrumbs";
@@ -21,7 +21,7 @@ type Params = Promise<{ slug: string }>;
 
 export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
   const { slug } = await params;
-  const article = getInsight(slug);
+  const article = await getInsightDetail(slug);
   if (!article) return { title: "Article not found" };
   return buildMetadata({
     title: article.seoTitle,
@@ -35,11 +35,11 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
 
 export default async function InsightArticlePage({ params }: { params: Params }) {
   const { slug } = await params;
-  const article = getInsight(slug);
+  const article = await getInsightDetail(slug);
   if (!article) notFound();
 
   const crumbs = [{ label: "Home", href: "/" }, { label: "Insights", href: "/insights" }, { label: article.title }];
-  const related = getRelatedInsights(article, 3);
+  const related = await getRelatedInsightList(article, 3);
   const articleJsonLd = {
     "@context": "https://schema.org",
     "@type": "Article",

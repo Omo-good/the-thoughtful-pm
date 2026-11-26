@@ -1,17 +1,20 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { findServiceByEnquiryValue } from "@/data/services";
+import type { Service } from "@/data/services";
 import { ContactForm } from "./ContactForm";
 
 interface ContactPanelProps {
   initialService: string;
   fallbackEmail: string | null;
+  services: Service[];
 }
 
 /** Renders the form with a preselected service. Used directly as the static fallback too (no service). */
-export function ContactPanel({ initialService, fallbackEmail }: ContactPanelProps) {
-  const selected = findServiceByEnquiryValue(initialService);
+export function ContactPanel({ initialService, fallbackEmail, services }: ContactPanelProps) {
+  const selected = initialService
+    ? services.find((s) => s.enquiryValue === initialService || s.slug === initialService)
+    : undefined;
   return (
     <div>
       <p className="mb-4 min-h-6 rounded-md text-sm" aria-live="polite">
@@ -27,7 +30,7 @@ export function ContactPanel({ initialService, fallbackEmail }: ContactPanelProp
 }
 
 /** Reads ?service= on the client so the page itself can stay statically prerendered. */
-export function ContactPanelFromUrl({ fallbackEmail }: { fallbackEmail: string | null }) {
+export function ContactPanelFromUrl({ fallbackEmail, services }: { fallbackEmail: string | null; services: Service[] }) {
   const params = useSearchParams();
-  return <ContactPanel initialService={params.get("service") ?? ""} fallbackEmail={fallbackEmail} />;
+  return <ContactPanel initialService={params.get("service") ?? ""} fallbackEmail={fallbackEmail} services={services} />;
 }

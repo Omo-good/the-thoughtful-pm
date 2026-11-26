@@ -19,7 +19,7 @@ export function CTASection({ headline, body, ctaLabel, ctaHref, secondaryLabel, 
         </h2>
         {body ? <p className="mx-auto mt-5 max-w-2xl text-lg text-paper/90">{body}</p> : null}
         <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
-          <ButtonLink href={ctaHref} className="bg-paper text-teal hover:bg-gold hover:text-charcoal">
+          <ButtonLink href={ctaHref} variant="inverse">
             {ctaLabel}
           </ButtonLink>
           {secondaryLabel && secondaryHref ? (

@@ -9,16 +9,21 @@
  *  - gold and terracotta are used only for rules, borders and decoration, never for text.
  */
 @theme inline {
-  --color-ivory: #f7f3ed;
-  --color-charcoal: #1f1f1f;
-  --color-gold: #b69d73;
-  --color-teal: #174c48;
-  --color-terracotta: #c77d63;
+  /* Light gold direction (approved reference). Deep gold is used for text and buttons
+     so it passes WCAG AA on ivory. Gold is kept for rules and decoration. */
+  --color-ivory: #f8f4ec;
+  --color-charcoal: #1c1813;
+  --color-gold: #9a6b2f;
+  --color-gold-deep: #7a5219;
+  --color-sand: #e8d9be;
+  --color-panel: #efe6d4;
+  --color-teal: #7a5219;
+  --color-terracotta: #c18a76;
   --color-clay: #9a4e36;
   --color-paper: #ffffff;
-  --color-muted: #6b6660;
+  --color-muted: #5c5244;
   --color-muted-brand: #77736e;
-  --font-display: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
+  --font-display: var(--font-playfair), "Playfair Display", Georgia, serif;
   --font-sans: var(--font-inter), Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 

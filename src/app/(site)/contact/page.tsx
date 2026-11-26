@@ -5,16 +5,18 @@ import { siteConfig } from "@/data/site-config";
 import { Breadcrumbs, breadcrumbJsonLd } from "@/components/ui/Breadcrumbs";
 import { JsonLd } from "@/components/ui/JsonLd";
 import { ContactPanel, ContactPanelFromUrl } from "@/components/contact/ContactPanel";
+import { getServices } from "@/lib/back-office";
 
 export const metadata: Metadata = buildMetadata({
   title: "Contact",
-  description: "Tell Arewa about your product idea, existing product or Product Management needs. Enquiries are reviewed personally.",
+  description: "Tell Goodness about your product idea, existing product or Product Management needs. Enquiries are reviewed personally.",
   path: "/contact",
 });
 
 const crumbs = [{ label: "Home", href: "/" }, { label: "Contact" }];
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const services = await getServices();
   return (
     <main id="main" className="flex-1">
       <div className="mx-auto max-w-7xl px-5 pb-6 pt-12 sm:px-8">
@@ -43,8 +45,8 @@ export default function ContactPage() {
         </div>
         <div className="lg:col-span-7">
           {/* The fallback is the same form with no preselection, so the page does not shift when ?service= is read. */}
-          <Suspense fallback={<ContactPanel initialService="" fallbackEmail={siteConfig.email} />}>
-            <ContactPanelFromUrl fallbackEmail={siteConfig.email} />
+          <Suspense fallback={<ContactPanel initialService="" fallbackEmail={siteConfig.email} services={services} />}>
+            <ContactPanelFromUrl fallbackEmail={siteConfig.email} services={services} />
           </Suspense>
         </div>
       </section>

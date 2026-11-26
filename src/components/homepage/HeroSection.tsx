@@ -9,7 +9,7 @@ export function HeroSection() {
           Building products with <em className="text-teal">curiosity, clarity &amp; care.</em>
         </h1>
         <p className="mt-8 max-w-xl text-lg text-charcoal/85">
-          Hi, I&apos;m Arewa — a Product Manager who believes building great products starts with asking better questions, understanding people and bringing clarity to complex problems.
+          Hi, I&apos;m Goodness — a Product Manager who believes building great products starts with asking better questions, understanding people and bringing clarity to complex problems.
         </p>
         <p className="mt-4 max-w-xl text-muted">
           I help founders and businesses turn ideas into clearly defined, user-centred digital products through thoughtful Product Management.

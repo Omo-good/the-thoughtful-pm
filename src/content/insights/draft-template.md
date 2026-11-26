@@ -3,7 +3,7 @@ slug: draft-template
 title: Draft template (not public)
 excerpt: Template for a future insight. Keep published set to false until the article is approved.
 category: Product Thinking
-author: Arewa
+author: Goodness
 publishedAt: 2026-01-01
 updatedAt:
 readingTime:
