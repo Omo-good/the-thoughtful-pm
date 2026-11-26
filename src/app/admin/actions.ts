@@ -75,14 +75,23 @@ export async function saveProject(formData: FormData) {
   const slug = String(formData.get("slug") ?? "");
 
   // Images: a new upload replaces the URL; otherwise the typed or current URL is kept.
+  let uploadFailed = false;
   let coverUrl = String(formData.get("cover_url") ?? "").trim() || null;
   const coverFile = fileOf(formData.get("cover_file"));
-  if (coverFile) coverUrl = (await uploadCaseImage(token, slug, coverFile)) ?? coverUrl;
+  if (coverFile) {
+    const url = await uploadCaseImage(token, slug, coverFile);
+    if (url) coverUrl = url;
+    else uploadFailed = true;
+  }
 
   let heroUrl = String(formData.get("hero_url_current") ?? "").trim() || null;
   if (formData.get("clear_hero") === "on") heroUrl = null;
   const heroFile = fileOf(formData.get("hero_file"));
-  if (heroFile) heroUrl = (await uploadCaseImage(token, slug, heroFile)) ?? heroUrl;
+  if (heroFile) {
+    const url = await uploadCaseImage(token, slug, heroFile);
+    if (url) heroUrl = url;
+    else uploadFailed = true;
+  }
 
   const shots: Shot[] = parseShots(formData.get("screenshots_json"))
     .flatMap((shot, i) =>
@@ -96,6 +105,7 @@ export async function saveProject(formData: FormData) {
     if (!file) continue;
     const url = await uploadCaseImage(token, slug, file);
     if (url) shots.push({ url, alt: "" });
+    else uploadFailed = true;
   }
 
   // One decision per line, written as "Title | Why it mattered".
@@ -142,20 +152,36 @@ export async function saveProject(formData: FormData) {
     prefer: "return=minimal",
   });
   revalidatePublic();
-  redirect(`/admin/projects?saved=${encodeURIComponent(slug)}`);
+  redirect(`/admin/projects/${encodeURIComponent(slug)}?saved=1${uploadFailed ? "&error=upload" : ""}`);
 }
 
 export async function saveSettings(formData: FormData) {
   const token = await requireToken();
 
+  let uploadFailed = false;
   let portraitUrl = String(formData.get("portrait_url_current") ?? "").trim() || null;
   if (formData.get("clear_portrait") === "on") portraitUrl = null;
   const portraitFile = fileOf(formData.get("portrait_file"));
-  if (portraitFile) portraitUrl = (await uploadCaseImage(token, "site", portraitFile)) ?? portraitUrl;
+  if (portraitFile) {
+    const url = await uploadCaseImage(token, "site", portraitFile);
+    if (url) portraitUrl = url;
+    else uploadFailed = true;
+  }
+
+  let homePortraitUrl = String(formData.get("home_portrait_url_current") ?? "").trim() || null;
+  if (formData.get("clear_home_portrait") === "on") homePortraitUrl = null;
+  const homePortraitFile = fileOf(formData.get("home_portrait_file"));
+  if (homePortraitFile) {
+    const url = await uploadCaseImage(token, "site", homePortraitFile);
+    if (url) homePortraitUrl = url;
+    else uploadFailed = true;
+  }
 
   const body = {
     portrait_url: portraitUrl,
     portrait_alt: String(formData.get("portrait_alt") ?? "").trim() || null,
+    home_portrait_url: homePortraitUrl,
+    home_portrait_alt: String(formData.get("home_portrait_alt") ?? "").trim() || null,
     display_name: String(formData.get("display_name") ?? "").trim(),
     brand_name: String(formData.get("brand_name") ?? "").trim(),
     email: String(formData.get("email") ?? "").trim() || null,
@@ -169,7 +195,7 @@ export async function saveSettings(formData: FormData) {
   };
   await adminRest(token, "site_settings?id=eq.1", { method: "PATCH", body, prefer: "return=minimal" });
   revalidatePublic();
-  redirect("/admin/settings?saved=1");
+  redirect(`/admin/settings?saved=1${uploadFailed ? "&error=upload" : ""}`);
 }
 
 export async function saveService(formData: FormData) {

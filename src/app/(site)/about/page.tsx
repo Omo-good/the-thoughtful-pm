@@ -3,7 +3,7 @@ import Link from "next/link";
 import { buildMetadata } from "@/lib/metadata";
 import { JsonLd } from "@/components/ui/JsonLd";
 import { siteConfig, absoluteUrl } from "@/data/site-config";
-import { getPortrait } from "@/lib/back-office";
+import { getPortraits } from "@/lib/back-office";
 
 export const metadata: Metadata = buildMetadata({
   title: "About",
@@ -36,7 +36,7 @@ const personJsonLd = {
 };
 
 export default async function AboutPage() {
-  const portrait = await getPortrait();
+  const { about: portrait } = await getPortraits();
   return (
     <main id="main" className="flex-1 bg-ivory text-charcoal">
       <JsonLd data={personJsonLd} />

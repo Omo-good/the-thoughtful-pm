@@ -133,9 +133,14 @@ export async function getShowPrices(): Promise<boolean> {
   return siteConfig.pricing.showPrices;
 }
 
-/** The owner's portrait for the About page, or null when none is uploaded. */
-export async function getPortrait(): Promise<{ src: string; alt: string } | null> {
-  const rows = await rest<{ portrait_url: string | null; portrait_alt: string | null }[]>("site_settings?select=portrait_url,portrait_alt&id=eq.1");
+/** The owner's portraits: one for the About page, one for the homepage. Null when not uploaded. */
+export async function getPortraits(): Promise<{ about: { src: string; alt: string } | null; home: { src: string; alt: string } | null }> {
+  const rows = await rest<{ portrait_url: string | null; portrait_alt: string | null; home_portrait_url: string | null; home_portrait_alt: string | null }[]>(
+    "site_settings?select=portrait_url,portrait_alt,home_portrait_url,home_portrait_alt&id=eq.1",
+  );
   const row = rows?.[0];
-  return row?.portrait_url ? { src: row.portrait_url, alt: row.portrait_alt ?? "" } : null;
+  return {
+    about: row?.portrait_url ? { src: row.portrait_url, alt: row.portrait_alt ?? "" } : null,
+    home: row?.home_portrait_url ? { src: row.home_portrait_url, alt: row.home_portrait_alt ?? "" } : null,
+  };
 }

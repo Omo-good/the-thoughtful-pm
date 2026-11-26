@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { buildMetadata } from "@/lib/metadata";
 import { siteConfig } from "@/data/site-config";
-import { getPortrait } from "@/lib/back-office";
+import { getPortraits } from "@/lib/back-office";
 
 export const metadata: Metadata = buildMetadata({
   title: "The Thoughtful PM | Goodness — Product Manager & Consultant",
@@ -36,7 +36,7 @@ const kicker = "text-[11px] font-medium uppercase tracking-[0.34em] text-gold";
 const link = "text-sm text-gold underline underline-offset-8";
 
 export default async function HomePage() {
-  const portrait = await getPortrait();
+  const { home: portrait } = await getPortraits();
   return (
     <main id="main" className="flex-1 bg-ivory text-charcoal">
       {/* Hero */}

@@ -4,6 +4,10 @@ import type { NextConfig } from "next";
 // (article detail, search results) return real HTTP status codes, including 404s.
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  // Photos from phones are larger than the 1 MB default for server actions.
+  experimental: {
+    serverActions: { bodySizeLimit: "6mb" },
+  },
   reactStrictMode: true,
   turbopack: {
     rules: {

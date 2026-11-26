@@ -22,9 +22,10 @@ const input =
 const help = "text-xs font-normal text-[#5C5244]";
 
 
-export default async function EditProject({ params }: { params: Promise<{ slug: string }> }) {
+export default async function EditProject({ params, searchParams }: { params: Promise<{ slug: string }>; searchParams: Promise<{ saved?: string; error?: string }> }) {
   const token = await requireToken();
   const { slug } = await params;
+  const { saved, error } = await searchParams;
   const rows = await adminRest<Project[]>(token, `projects?slug=eq.${encodeURIComponent(slug)}&select=*`);
   const p = rows?.[0];
   if (!p) notFound();
@@ -36,6 +37,8 @@ export default async function EditProject({ params }: { params: Promise<{ slug: 
   return (
     <form action={saveProject} className="flex flex-col gap-7">
       <input type="hidden" name="slug" value={p.slug} />
+      {saved && !error ? <p className="text-sm text-teal">Project saved.</p> : null}
+      {error === "upload" ? <p className="text-sm text-[#9A3B2B]">Project saved, but an image did not upload. Try a JPG or PNG under 8 MB.</p> : null}
 
       <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
         <div>
