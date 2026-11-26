@@ -12,8 +12,8 @@ type Project = {
   slug: string; name: string; tagline: string; category: string | null; platform: string | null;
   role: string | null; status: string; status_note: string | null; featured: boolean; sort_order: number;
   cover_url: string | null; cover_alt: string | null; seo_description: string | null; problem: string | null;
-  users: Users | null; my_role: string | null; decisions: Decision[] | null; challenges: string | null;
-  outcome: string | null; highlights: string[] | null; published: boolean;
+  users: Users | null; my_role: string | null; decisions: Decision[] | null; highlights: string[] | null; published: boolean;
+  product_url: string | null; store_url: string | null;
   hero_url: string | null; hero_alt: string | null; screenshots: { url: string; alt?: string }[] | null;
   role_image_url: string | null;
 };
@@ -127,14 +127,6 @@ export default async function EditProject({ params, searchParams }: { params: Pr
               <textarea name="decisions" defaultValue={decisionText} rows={4} className={input} />
             </label>
             <label className={label}>
-              Challenges and lessons
-              <textarea name="challenges" defaultValue={p.challenges ?? ""} rows={3} className={input} />
-            </label>
-            <label className={label}>
-              Outcome and status
-              <textarea name="outcome" defaultValue={p.outcome ?? ""} rows={3} className={input} />
-            </label>
-            <label className={label}>
               Highlights (one per line)
               <textarea name="highlights" defaultValue={highlightText} rows={3} className={input} />
             </label>
@@ -143,6 +135,19 @@ export default async function EditProject({ params, searchParams }: { params: Pr
         </div>
 
         <div className="flex flex-col gap-6">
+          <div className={card}>
+            <h2 className="font-display text-2xl font-normal">Product links</h2>
+            <label className={label}>
+              Product website
+              <input name="product_url" type="url" defaultValue={p.product_url ?? ""} placeholder="https://" className={input} />
+            </label>
+            <label className={label}>
+              App store or Play Store link
+              <input name="store_url" type="url" defaultValue={p.store_url ?? ""} placeholder="https://" className={input} />
+            </label>
+            <span className={help}>Shown as buttons under the project details on the case study. Leave empty to hide.</span>
+          </div>
+
           <div className={card}>
             <h2 className="font-display text-2xl font-normal">Cover image</h2>
             <input type="hidden" name="cover_url" value={p.cover_url ?? ""} />

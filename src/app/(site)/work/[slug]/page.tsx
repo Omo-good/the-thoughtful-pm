@@ -54,8 +54,6 @@ export default async function CaseStudyPage({ params }: { params: Params }) {
     ["role", "My role"],
     ["decisions", "Key decisions"],
     ["screens", "Product screens"],
-    ...(project.challenges ? [["lessons", "Challenges and lessons"] as [string, string]] : []),
-    ...(project.outcome ? [["outcome", "Outcome"] as [string, string]] : []),
   ];
 
   return (
@@ -85,6 +83,20 @@ export default async function CaseStudyPage({ params }: { params: Params }) {
             </div>
           </dl>
         </div>
+        {project.productUrl || project.storeUrl ? (
+          <div className="mt-8 flex flex-wrap gap-4">
+            {project.productUrl ? (
+              <a href={project.productUrl} target="_blank" rel="noopener noreferrer" className="border border-gold px-6 py-3 text-sm font-medium text-gold hover:bg-gold hover:text-ivory">
+                Visit the product ↗
+              </a>
+            ) : null}
+            {project.storeUrl ? (
+              <a href={project.storeUrl} target="_blank" rel="noopener noreferrer" className="bg-gold px-6 py-3 text-sm font-medium text-ivory hover:bg-gold-deep">
+                Download the app ↗
+              </a>
+            ) : null}
+          </div>
+        ) : null}
         <nav aria-label="Jump to section" className="mt-10 flex flex-wrap gap-x-8 gap-y-3 border-y border-[rgba(28,24,19,0.18)] py-5 text-sm">
           {jump.map(([id, label]) => (
             <a key={id} href={`#${id}`} className="text-[#4A4034] hover:text-gold">
@@ -130,13 +142,9 @@ export default async function CaseStudyPage({ params }: { params: Params }) {
           <div className="flex flex-col gap-10">
             <p className={bigText}>{project.myRole || "[What you personally defined, decided and delivered.]"}</p>
             {project.roleImage ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={project.roleImage.src} alt={project.roleImage.alt} className="block h-auto w-full" />
-              ) : (
-                <div className="flex h-[240px] items-end bg-[#2B2116] p-6 text-[11px] uppercase tracking-[0.2em] text-[#C9B48A] md:h-[460px] md:p-8" aria-hidden="true">
-                  My role image · added in the back office
-                </div>
-              )}
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={project.roleImage.src} alt={project.roleImage.alt} className="block h-auto w-full" />
+            ) : null}
           </div>
         </Section>
 
@@ -164,17 +172,6 @@ export default async function CaseStudyPage({ params }: { params: Params }) {
           )}
         </Section>
 
-        {project.challenges ? (
-          <Section id="lessons" label="Challenges and lessons">
-            <p className={bigText}>{project.challenges}</p>
-          </Section>
-        ) : null}
-
-        {project.outcome ? (
-          <Section id="outcome" label="Outcome">
-            <p className={`${bigText} italic text-gold-deep`}>{project.outcome}</p>
-          </Section>
-        ) : null}
       </div>
 
       <section className="mt-4 flex flex-col gap-8 border-t border-[rgba(28,24,19,0.18)] px-6 py-16 md:flex-row md:items-end md:justify-between md:px-[110px] md:py-20">

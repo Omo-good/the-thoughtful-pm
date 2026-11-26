@@ -45,6 +45,13 @@ export async function setPublished(formData: FormData) {
   revalidatePath("/admin/projects");
 }
 
+// Keeps only http(s) links, so a typed link cannot point anywhere unexpected.
+function safeLink(value: FormDataEntryValue | null): string | null {
+  const text = String(value ?? "").trim();
+  if (!text) return null;
+  return /^https?:\/\//i.test(text) ? text : null;
+}
+
 function lines(value: FormDataEntryValue | null): string[] {
   return String(value ?? "")
     .split("\n")
@@ -150,8 +157,8 @@ export async function saveProject(formData: FormData) {
     },
     my_role: String(formData.get("my_role") ?? "").trim() || null,
     decisions,
-    challenges: String(formData.get("challenges") ?? "").trim() || null,
-    outcome: String(formData.get("outcome") ?? "").trim() || null,
+    product_url: safeLink(formData.get("product_url")),
+    store_url: safeLink(formData.get("store_url")),
     highlights: lines(formData.get("highlights")),
     updated_at: new Date().toISOString(),
   };

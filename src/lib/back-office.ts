@@ -26,8 +26,8 @@ type ProjectRow = {
   users: { who?: string; objective?: string; measure?: string } | null;
   my_role: string | null;
   decisions: { title: string; why: string }[] | null;
-  challenges: string | null;
-  outcome: string | null;
+  product_url: string | null;
+  store_url: string | null;
   hero_url: string | null;
   hero_alt: string | null;
   role_image_url: string | null;
@@ -71,13 +71,13 @@ function toProject(row: ProjectRow): Project {
       : null,
     myRole: row.my_role,
     decisions: row.decisions ?? [],
-    challenges: row.challenges,
-    outcome: row.outcome,
+    productUrl: row.product_url,
+    storeUrl: row.store_url,
   };
 }
 
 const PROJECT_COLUMNS =
-  "slug,name,tagline,category,platform,role,status_note,highlights,cover_url,seo_description,problem,users,my_role,decisions,challenges,outcome,hero_url,hero_alt,screenshots,role_image_url";
+  "slug,name,tagline,category,platform,role,status_note,highlights,cover_url,seo_description,problem,users,my_role,decisions,product_url,store_url,hero_url,hero_alt,screenshots,role_image_url";
 
 /** Published case studies in display order. Falls back to the local set when none are published. */
 export async function getProjects(): Promise<Project[]> {

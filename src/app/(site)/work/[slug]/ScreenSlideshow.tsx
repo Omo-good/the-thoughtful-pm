@@ -27,9 +27,9 @@ export function ScreenSlideshow({ shots }: { shots: Shot[] }) {
 
   return (
     <div className="flex flex-col gap-5" role="region" aria-roledescription="carousel" aria-label="Product screens">
-      <div className="bg-[#EFE6D6]">
+      <div className="flex justify-center bg-[#EFE6D6] p-6 md:p-10">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img key={index} src={current.src} alt={current.alt || `Product screen ${index + 1} of ${count}`} className="block h-auto w-full" />
+        <img key={index} src={current.src} alt={current.alt || `Product screen ${index + 1} of ${count}`} className="block h-auto max-h-[460px] w-auto max-w-full object-contain shadow-[0_10px_30px_rgba(28,24,19,0.12)] md:max-h-[560px]" />
       </div>
       {count > 1 ? (
         <div className="flex flex-wrap items-center justify-between gap-4">

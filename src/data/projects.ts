@@ -30,8 +30,8 @@ export interface Project {
   users?: { who: string; objective: string; measure: string } | null;
   myRole?: string | null;
   decisions?: { title: string; why: string }[];
-  challenges?: string | null;
-  outcome?: string | null;
+  productUrl?: string | null;
+  storeUrl?: string | null;
 }
 
 export const projects: Project[] = [
@@ -68,8 +68,6 @@ export const projects: Project[] = [
         why: "People will pay to use it, so the E-heart monogram, teal, terracotta, coral and ivory palette, and Fraunces with Inter were chosen to feel premium.",
       },
     ],
-    challenges: "Building it without spending money while keeping it premium. Free tools were used, and the brand was settled early.",
-    outcome: "Built and awaiting a pilot with friends. Not yet launched.",
   },
   {
     slug: "prayfirst",
@@ -104,8 +102,6 @@ export const projects: Project[] = [
         why: "The curated order guides the first stage, and two books are read at a time, about two chapters each day.",
       },
     ],
-    challenges: "Fitting a curated reading journey into a 365-day plan that covers all 66 books, with long passages like Psalm 119 read alone.",
-    outcome: "Built and installed on the owner's phone. No adoption figures claimed.",
   },
   {
     slug: "giftwyz",
@@ -140,8 +136,6 @@ export const projects: Project[] = [
         why: "Delivery outside Lagos and abroad comes later, once the first market is working.",
       },
     ],
-    challenges: "Delivering gifts of every size, from small items to large cakes, on a new platform with no set shipping volume.",
-    outcome: "Preparing for beta launch. Not yet public.",
   },
 ];
 
