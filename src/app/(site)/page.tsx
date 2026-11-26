@@ -167,7 +167,7 @@ export default async function HomePage() {
                   <span className="absolute inset-0 bg-gradient-to-t from-[#1C1813]/85 via-[#1C1813]/30 to-transparent" />
                 </>
               ) : null}
-              <span className="relative z-10 mb-3.5 text-[11px] uppercase tracking-[0.3em] opacity-80">Wellbeing · Product Lead</span>
+              <span className="relative z-10 mb-3.5 text-[11px] uppercase tracking-[0.3em] opacity-80">Wellbeing · Product Owner</span>
               <span className="relative z-10 font-display text-[40px] leading-none">PrayFirst</span>
               <span className="relative z-10 mt-3.5 max-w-[520px] text-[15px] leading-[1.6] opacity-90">A prayer habit app that asks for a pause before other apps open.</span>
               <span className="relative z-10 mt-5 text-[13px] underline underline-offset-[6px]">Read the case study →</span>
