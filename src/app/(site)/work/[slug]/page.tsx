@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { buildMetadata } from "@/lib/metadata";
 import { getProjects, getProjectBySlug } from "@/lib/back-office";
-import { ScreenSlideshow } from "./ScreenSlideshow";
+import { ScreenStrip } from "./ScreenStrip";
 
 export async function generateStaticParams() {
   const projects = await getProjects();
@@ -30,7 +30,7 @@ function Section({ id, label, children }: { id: string; label: string; children:
       <span id={`${id}-label`} className={`${kicker} md:pt-2`}>
         {label}
       </span>
-      <div>{children}</div>
+      <div className="min-w-0">{children}</div>
     </section>
   );
 }
@@ -164,7 +164,7 @@ export default async function CaseStudyPage({ params }: { params: Params }) {
 
         <Section id="screens" label="Product screens">
           {project.screenshots.length > 0 ? (
-            <ScreenSlideshow shots={project.screenshots} />
+            <ScreenStrip shots={project.screenshots} />
           ) : (
             <div className={`flex aspect-[4/3] w-full items-end ${placeholder} p-6 text-[11px] uppercase tracking-[0.2em] text-[#5C5244]`}>
               Product screen · 1600 × 1200 px minimum
