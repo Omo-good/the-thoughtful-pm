@@ -30,6 +30,7 @@ type ProjectRow = {
   outcome: string | null;
   hero_url: string | null;
   hero_alt: string | null;
+  role_image_url: string | null;
   screenshots: { url: string; alt?: string }[] | null;
 };
 
@@ -59,6 +60,7 @@ function toProject(row: ProjectRow): Project {
     points: row.highlights ?? [],
     cover: row.cover_url ?? "",
     hero: row.hero_url ? { src: row.hero_url, alt: row.hero_alt ?? "" } : null,
+    roleImage: row.role_image_url ? { src: row.role_image_url, alt: "" } : null,
     screenshots: (row.screenshots ?? [])
       .filter((shot) => shot.url)
       .map((shot) => ({ src: shot.url, alt: shot.alt ?? "" })),
@@ -75,7 +77,7 @@ function toProject(row: ProjectRow): Project {
 }
 
 const PROJECT_COLUMNS =
-  "slug,name,tagline,category,platform,role,status_note,highlights,cover_url,seo_description,problem,users,my_role,decisions,challenges,outcome,hero_url,hero_alt,screenshots";
+  "slug,name,tagline,category,platform,role,status_note,highlights,cover_url,seo_description,problem,users,my_role,decisions,challenges,outcome,hero_url,hero_alt,screenshots,role_image_url";
 
 /** Published case studies in display order. Falls back to the local set when none are published. */
 export async function getProjects(): Promise<Project[]> {

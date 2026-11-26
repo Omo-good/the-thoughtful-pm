@@ -93,6 +93,15 @@ export async function saveProject(formData: FormData) {
     else uploadFailed = true;
   }
 
+  let roleImageUrl = String(formData.get("role_image_url_current") ?? "").trim() || null;
+  if (formData.get("clear_role_image") === "on") roleImageUrl = null;
+  const roleImageFile = fileOf(formData.get("role_image_file"));
+  if (roleImageFile) {
+    const url = await uploadCaseImage(token, slug, roleImageFile);
+    if (url) roleImageUrl = url;
+    else uploadFailed = true;
+  }
+
   const shots: Shot[] = parseShots(formData.get("screenshots_json"))
     .flatMap((shot, i) =>
       formData.get(`shot_remove_${i}`) === "on"
@@ -130,6 +139,7 @@ export async function saveProject(formData: FormData) {
     cover_alt: String(formData.get("cover_alt") ?? "").trim() || null,
     hero_url: heroUrl,
     hero_alt: String(formData.get("hero_alt") ?? "").trim() || null,
+    role_image_url: roleImageUrl,
     screenshots: shots,
     seo_description: String(formData.get("seo_description") ?? "").trim() || null,
     problem: String(formData.get("problem") ?? "").trim() || null,

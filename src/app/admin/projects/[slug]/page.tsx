@@ -15,6 +15,7 @@ type Project = {
   users: Users | null; my_role: string | null; decisions: Decision[] | null; challenges: string | null;
   outcome: string | null; highlights: string[] | null; published: boolean;
   hero_url: string | null; hero_alt: string | null; screenshots: { url: string; alt?: string }[] | null;
+  role_image_url: string | null;
 };
 
 const card = "flex flex-col gap-[18px] bg-white p-7";
@@ -165,6 +166,17 @@ export default async function EditProject({ params, searchParams }: { params: Pr
             <label className={label}>
               Hero alt text
               <input name="hero_alt" defaultValue={p.hero_alt ?? ""} className={input} />
+            </label>
+          </div>
+
+          <div className={card}>
+            <h2 className="font-display text-2xl font-normal">My role image</h2>
+            <input type="hidden" name="role_image_url_current" value={p.role_image_url ?? ""} />
+            <Dropzone src={p.role_image_url} name="role_image_file" empty="Drop an image of your work here" />
+            <span className={help}>Shows in the My role section of the case study page, for example a flow, diagram or screen you designed. {p.role_image_url ? "Uploaded." : "Not uploaded yet."}</span>
+            <label className="flex items-center gap-2 text-[13px] font-medium">
+              <input type="checkbox" name="clear_role_image" className="h-4 w-4 accent-gold" />
+              Remove this image
             </label>
           </div>
 

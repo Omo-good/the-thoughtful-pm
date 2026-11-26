@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { buildMetadata } from "@/lib/metadata";
 import { getProjects, getProjectBySlug } from "@/lib/back-office";
+import { ScreenSlideshow } from "./ScreenSlideshow";
 
 export async function generateStaticParams() {
   const projects = await getProjects();
@@ -53,8 +54,8 @@ export default async function CaseStudyPage({ params }: { params: Params }) {
     ["role", "My role"],
     ["decisions", "Key decisions"],
     ["screens", "Product screens"],
-    ["lessons", "Challenges and lessons"],
-    ["outcome", "Outcome"],
+    ...(project.challenges ? [["lessons", "Challenges and lessons"] as [string, string]] : []),
+    ...(project.outcome ? [["outcome", "Outcome"] as [string, string]] : []),
   ];
 
   return (
@@ -128,7 +129,14 @@ export default async function CaseStudyPage({ params }: { params: Params }) {
         <Section id="role" label="My role">
           <div className="flex flex-col gap-10">
             <p className={bigText}>{project.myRole || "[What you personally defined, decided and delivered.]"}</p>
-            <div className="h-[240px] bg-[#2B2116] md:h-[460px]" aria-hidden="true" />
+            {project.roleImage ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={project.roleImage.src} alt={project.roleImage.alt} className="block h-auto w-full" />
+              ) : (
+                <div className="flex h-[240px] items-end bg-[#2B2116] p-6 text-[11px] uppercase tracking-[0.2em] text-[#C9B48A] md:h-[460px] md:p-8" aria-hidden="true">
+                  My role image · added in the back office
+                </div>
+              )}
           </div>
         </Section>
 
@@ -147,37 +155,26 @@ export default async function CaseStudyPage({ params }: { params: Params }) {
         </Section>
 
         <Section id="screens" label="Product screens">
-          <div className="flex flex-col gap-6">
-            {project.screenshots[0] ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={project.screenshots[0].src} alt={project.screenshots[0].alt} className="block h-auto w-full" />
-            ) : (
-              <div className={`flex aspect-[4/3] w-full items-end ${placeholder} p-6 text-[11px] uppercase tracking-[0.2em] text-[#5C5244]`}>
-                Product screen · 1600 × 1200 px minimum
-              </div>
-            )}
-            <div className="grid gap-6 md:grid-cols-2">
-              {[1, 2].map((n) =>
-                project.screenshots[n] ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img key={n} src={project.screenshots[n].src} alt={project.screenshots[n].alt} className="block h-auto w-full" />
-                ) : (
-                  <div key={n} className={`flex aspect-[4/3] items-end md:aspect-[4/5] ${placeholder} p-5 text-[11px] uppercase tracking-[0.2em] text-[#5C5244]`}>
-                    Product screen · 1600 × 1200 px minimum
-                  </div>
-                ),
-              )}
+          {project.screenshots.length > 0 ? (
+            <ScreenSlideshow shots={project.screenshots} />
+          ) : (
+            <div className={`flex aspect-[4/3] w-full items-end ${placeholder} p-6 text-[11px] uppercase tracking-[0.2em] text-[#5C5244]`}>
+              Product screen · 1600 × 1200 px minimum
             </div>
-          </div>
+          )}
         </Section>
 
-        <Section id="lessons" label="Challenges and lessons">
-          <p className={bigText}>{project.challenges || "[One challenge and one lesson, in plain words.]"}</p>
-        </Section>
+        {project.challenges ? (
+          <Section id="lessons" label="Challenges and lessons">
+            <p className={bigText}>{project.challenges}</p>
+          </Section>
+        ) : null}
 
-        <Section id="outcome" label="Outcome">
-          <p className={`${bigText} italic text-gold-deep`}>{project.outcome || "[Current status, stated as it is.]"}</p>
-        </Section>
+        {project.outcome ? (
+          <Section id="outcome" label="Outcome">
+            <p className={`${bigText} italic text-gold-deep`}>{project.outcome}</p>
+          </Section>
+        ) : null}
       </div>
 
       <section className="mt-4 flex flex-col gap-8 border-t border-[rgba(28,24,19,0.18)] px-6 py-16 md:flex-row md:items-end md:justify-between md:px-[110px] md:py-20">

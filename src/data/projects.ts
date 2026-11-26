@@ -23,6 +23,7 @@ export interface Project {
   points: string[];
   cover: string;
   hero?: { src: string; alt: string } | null;
+  roleImage?: { src: string; alt: string } | null;
   screenshots: ProjectScreenshot[];
   seoDescription: string;
   problem?: string | null;
