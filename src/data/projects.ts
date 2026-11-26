@@ -30,6 +30,8 @@ export interface Project {
   users?: { who: string; objective: string; measure: string } | null;
   myRole?: string | null;
   decisions?: { title: string; why: string }[];
+  challenges?: string | null;
+  outcome?: string | null;
   productUrl?: string | null;
   storeUrl?: string | null;
 }
@@ -54,6 +56,8 @@ export const projects: Project[] = [
       measure: "A successful pilot with friends who are in relationships, before a wider launch",
     },
     myRole: "Product lead on the PRD (draft v0.2): platform choice, brand direction, the partner chat design and the pilot plan.",
+    challenges: "Building it without spending money while keeping it premium. Free tools were used, and the brand was settled early.",
+    outcome: "Built and awaiting a pilot with friends. Not yet launched.",
     decisions: [
       {
         title: "Build a PWA first, not a native app",
@@ -88,6 +92,8 @@ export const projects: Project[] = [
       measure: "Days read against the plan, shown as a simple Day N of 365 counter",
     },
     myRole: "Product owner: drafted the PRD and set the MVP scope, including the decision to ship all modules together as version 1.",
+    challenges: "Fitting a curated reading journey into a 365-day plan that covers all 66 books, with long passages like Psalm 119 read alone.",
+    outcome: "Built and installed on the owner's phone. No adoption figures claimed.",
     decisions: [
       {
         title: "Show the prayer screen once per app, per day",
@@ -122,6 +128,8 @@ export const projects: Project[] = [
       measure: "Closed beta tester feedback, then an open beta planned for October to November 2026",
     },
     myRole: "Product manager: wrote the vendor portal, bill payments and gift card PRDs, and prepared the roadmap and revenue plan.",
+    challenges: "Delivering gifts of every size, from small items to large cakes, on a new platform with no set shipping volume.",
+    outcome: "Preparing for beta launch. Not yet public.",
     decisions: [
       {
         title: "Charge users a 1.5% service fee, with no vendor commission yet",

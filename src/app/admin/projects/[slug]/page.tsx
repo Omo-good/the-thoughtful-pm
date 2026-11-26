@@ -12,7 +12,8 @@ type Project = {
   slug: string; name: string; tagline: string; category: string | null; platform: string | null;
   role: string | null; status: string; status_note: string | null; featured: boolean; sort_order: number;
   cover_url: string | null; cover_alt: string | null; seo_description: string | null; problem: string | null;
-  users: Users | null; my_role: string | null; decisions: Decision[] | null; highlights: string[] | null; published: boolean;
+  users: Users | null; my_role: string | null; decisions: Decision[] | null; challenges: string | null;
+  outcome: string | null; highlights: string[] | null; published: boolean;
   product_url: string | null; store_url: string | null;
   hero_url: string | null; hero_alt: string | null; screenshots: { url: string; alt?: string }[] | null;
   role_image_url: string | null;
@@ -125,6 +126,14 @@ export default async function EditProject({ params, searchParams }: { params: Pr
             <label className={label}>
               Key decisions (up to 3, one per line as “Title | Why it mattered”)
               <textarea name="decisions" defaultValue={decisionText} rows={4} className={input} />
+            </label>
+            <label className={label}>
+              Challenges and lessons
+              <textarea name="challenges" defaultValue={p.challenges ?? ""} rows={3} className={input} />
+            </label>
+            <label className={label}>
+              Outcome and status
+              <textarea name="outcome" defaultValue={p.outcome ?? ""} rows={3} className={input} />
             </label>
             <label className={label}>
               Highlights (one per line)

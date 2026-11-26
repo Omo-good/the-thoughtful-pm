@@ -157,6 +157,8 @@ export async function saveProject(formData: FormData) {
     },
     my_role: String(formData.get("my_role") ?? "").trim() || null,
     decisions,
+    challenges: String(formData.get("challenges") ?? "").trim() || null,
+    outcome: String(formData.get("outcome") ?? "").trim() || null,
     product_url: safeLink(formData.get("product_url")),
     store_url: safeLink(formData.get("store_url")),
     highlights: lines(formData.get("highlights")),

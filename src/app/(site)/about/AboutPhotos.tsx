@@ -24,7 +24,7 @@ export function AboutPhotos({ portrait, second }: { portrait: Photo | null; seco
           type="button"
           onClick={toggle}
           aria-label="Bring this photo to the front"
-          className="absolute bottom-[-14px] left-0 z-10 h-[62%] w-[42%] overflow-hidden border-[8px] border-ivory shadow-[0_10px_30px_rgba(28,24,19,0.18)]"
+          className="absolute bottom-[-28px] left-[-28px] z-10 h-[82%] w-[70%] overflow-hidden"
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={back.src} alt={back.alt} className="h-full w-full object-cover object-[50%_20%]" />
