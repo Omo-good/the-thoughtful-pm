@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { adminRest, requireToken } from "@/lib/admin";
 import { saveProject } from "../../actions";
 import { Dropzone } from "../../Dropzone";
+import { ScreenPicker } from "../../ScreenPicker";
 import { SaveButton } from "../../SaveButton";
 
 type Decision = { title: string; why: string };
@@ -189,11 +190,7 @@ export default async function EditProject({ params, searchParams }: { params: Pr
             ) : (
               <div className="flex h-[90px] items-center justify-center bg-[#FAF7F0] text-[13px] text-[#5C5244]">No product screens yet</div>
             )}
-            <label className="inline-flex w-fit cursor-pointer items-center gap-2 border border-gold bg-white px-5 py-3 text-sm font-medium text-charcoal hover:bg-sand">
-              + Add product screens
-              <span className="text-xs font-normal text-[#5C5244]">(up to 8)</span>
-              <input type="file" name="screenshot_files" accept="image/*" multiple className="sr-only" />
-            </label>
+            <ScreenPicker />
             <span className={help}>Shows in the Product screens section of the case study page. The first screen is the large one, then two smaller. Minimum 1600 × 1200 px each.</span>
           </div>
 

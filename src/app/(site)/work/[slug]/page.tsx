@@ -95,9 +95,9 @@ export default async function CaseStudyPage({ params }: { params: Params }) {
 
       {/* Full-width hero. Uses the uploaded hero image, or a placeholder until one is added in the back office. */}
       {project.hero ? (
-        <section className="relative left-1/2 mt-12 h-[220px] w-screen -translate-x-1/2 overflow-hidden md:h-[min(78vh,820px)]">
+        <section className="relative left-1/2 mt-12 w-screen -translate-x-1/2 overflow-hidden">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={project.hero.src} alt={project.hero.alt} className="h-full w-full object-cover" />
+          <img src={project.hero.src} alt={project.hero.alt} className="block h-auto w-full" />
         </section>
       ) : (
         <section className={`relative left-1/2 mt-12 flex h-[220px] w-screen -translate-x-1/2 items-end md:h-[min(78vh,820px)] ${placeholder} p-8 md:p-12`}>
@@ -150,7 +150,7 @@ export default async function CaseStudyPage({ params }: { params: Params }) {
           <div className="flex flex-col gap-6">
             {project.screenshots[0] ? (
               // eslint-disable-next-line @next/next/no-img-element
-              <img src={project.screenshots[0].src} alt={project.screenshots[0].alt} className="aspect-[4/3] w-full object-cover" />
+              <img src={project.screenshots[0].src} alt={project.screenshots[0].alt} className="block h-auto w-full" />
             ) : (
               <div className={`flex aspect-[4/3] w-full items-end ${placeholder} p-6 text-[11px] uppercase tracking-[0.2em] text-[#5C5244]`}>
                 Product screen · 1600 × 1200 px minimum
@@ -160,7 +160,7 @@ export default async function CaseStudyPage({ params }: { params: Params }) {
               {[1, 2].map((n) =>
                 project.screenshots[n] ? (
                   // eslint-disable-next-line @next/next/no-img-element
-                  <img key={n} src={project.screenshots[n].src} alt={project.screenshots[n].alt} className="aspect-[4/3] w-full object-cover md:aspect-[4/5]" />
+                  <img key={n} src={project.screenshots[n].src} alt={project.screenshots[n].alt} className="block h-auto w-full" />
                 ) : (
                   <div key={n} className={`flex aspect-[4/3] items-end md:aspect-[4/5] ${placeholder} p-5 text-[11px] uppercase tracking-[0.2em] text-[#5C5244]`}>
                     Product screen · 1600 × 1200 px minimum

@@ -1,34 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type ChangeEvent } from "react";
-
-const MAX_EDGE = 2400;
-const SHRINK_ABOVE_BYTES = 300 * 1024;
-
-/**
- * Shrinks large photos in the browser before they are sent. Server uploads are capped by the host,
- * so a full-size phone photo would otherwise fail. Small images and non-images are left alone.
- */
-async function shrink(file: File): Promise<File> {
-  if (!file.type.startsWith("image/") || file.size <= SHRINK_ABOVE_BYTES) return file;
-  try {
-    const bitmap = await createImageBitmap(file);
-    const scale = Math.min(1, MAX_EDGE / Math.max(bitmap.width, bitmap.height));
-    const canvas = document.createElement("canvas");
-    canvas.width = Math.round(bitmap.width * scale);
-    canvas.height = Math.round(bitmap.height * scale);
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return file;
-    ctx.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
-    bitmap.close();
-    const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, "image/jpeg", 0.85));
-    if (!blob) return file;
-    const name = file.name.replace(/\.[^.]+$/, "") + ".jpg";
-    return new File([blob], name, { type: "image/jpeg" });
-  } catch {
-    return file;
-  }
-}
+import { shrink } from "./shrink";
 
 /** Image drop zone for the back office. Shows the current or chosen image, and takes a file on click or drop. */
 export function Dropzone({ src, name, empty, wide = false }: { src: string | null; name: string; empty: string; wide?: boolean }) {
