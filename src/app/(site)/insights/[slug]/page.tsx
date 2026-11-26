@@ -6,7 +6,7 @@ import { buildMetadata } from "@/lib/metadata";
 import { getInsightDetail, getRelatedInsightList } from "@/lib/insights-source";
 import { categoryLabel } from "@/data/content-categories";
 import { formatDate } from "@/lib/utils";
-import { Breadcrumbs, breadcrumbJsonLd } from "@/components/ui/Breadcrumbs";
+import { breadcrumbJsonLd } from "@/components/ui/Breadcrumbs";
 import { JsonLd } from "@/components/ui/JsonLd";
 import { ReadingTime } from "@/components/ui/ReadingTime";
 import { ShareButton } from "@/components/insights/ShareButton";
@@ -53,19 +53,21 @@ export default async function InsightArticlePage({ params }: { params: Params })
   };
 
   return (
-    <main id="main" className="flex-1">
-      <div className="mx-auto max-w-3xl px-5 pb-6 pt-12 sm:px-8">
-        <Breadcrumbs items={crumbs} />
-      </div>
+    <main id="main" className="flex-1 bg-ivory text-charcoal">
       <JsonLd data={breadcrumbJsonLd(crumbs)} />
       <JsonLd data={articleJsonLd} />
 
-      <article aria-labelledby="article-title" className="mx-auto max-w-3xl px-5 pb-10 sm:px-8">
-        <header className="flex flex-col gap-5">
-          <p className="eyebrow">{categoryLabel(article.category)}</p>
-          <h1 id="article-title">{article.title}</h1>
-          {article.excerpt ? <p className="text-xl text-charcoal/85">{article.excerpt}</p> : null}
-          <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-muted">
+      <article aria-labelledby="article-title" className="px-6 pb-16 pt-12 md:px-[110px] md:pt-[80px]">
+        <Link href="/insights" className="text-sm text-gold underline underline-offset-8">
+          ← All insights
+        </Link>
+        <header className="mt-10 flex max-w-[860px] flex-col gap-6">
+          <p className="text-[11px] font-medium uppercase tracking-[0.34em] text-gold">{categoryLabel(article.category)}</p>
+          <h1 id="article-title" className="font-display text-[clamp(2.5rem,6vw,5rem)] font-normal leading-[1.05]">
+            {article.title}
+          </h1>
+          {article.excerpt ? <p className="text-xl leading-[1.7] text-[#4A4034]">{article.excerpt}</p> : null}
+          <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-[#5C5244]">
             <span>{article.author}</span>
             <span aria-hidden="true">·</span>
             <time dateTime={article.publishedAt}>{formatDate(article.publishedAt)}</time>
@@ -83,22 +85,22 @@ export default async function InsightArticlePage({ params }: { params: Params })
         </header>
 
         {article.featuredImage ? (
-          <figure className="mt-10">
-            <Image src={article.featuredImage} alt={article.title} width={1200} height={630} sizes="(min-width: 768px) 768px, 100vw" className="h-auto w-full rounded-lg" priority />
+          <figure className="relative mt-12 aspect-[16/9] w-full overflow-hidden bg-sand">
+            <Image src={article.featuredImage} alt={article.title} fill sizes="100vw" className="object-cover" priority />
           </figure>
         ) : null}
 
-        <div className="article-body mt-12 border-t border-gold/40 pt-12" dangerouslySetInnerHTML={{ __html: article.html }} />
+        <div className="article-body mx-auto mt-14 max-w-[720px] text-[18px] leading-[1.8] text-charcoal/90" dangerouslySetInnerHTML={{ __html: article.html }} />
 
-        <div className="mt-14 flex flex-wrap items-center justify-between gap-4 border-t border-gold/40 pt-8">
-          <Link href="/insights" className="font-medium text-teal hover:underline">
-            ← Back to Insights
+        <div className="mx-auto mt-14 flex max-w-[720px] flex-wrap items-center justify-between gap-4 border-t border-[rgba(28,24,19,0.18)] pt-8">
+          <Link href="/insights" className="text-sm text-gold underline underline-offset-8">
+            ← All insights
           </Link>
           <ShareButton title={article.title} path={`/insights/${article.slug}`} />
         </div>
       </article>
 
-      <div className="mx-auto max-w-7xl px-5 sm:px-8">
+      <div className="px-6 pb-24 md:px-[110px]">
         <RelatedArticles articles={related} />
       </div>
     </main>

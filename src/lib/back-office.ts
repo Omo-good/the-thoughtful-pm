@@ -28,6 +28,9 @@ type ProjectRow = {
   decisions: { title: string; why: string }[] | null;
   challenges: string | null;
   outcome: string | null;
+  hero_url: string | null;
+  hero_alt: string | null;
+  screenshots: { url: string; alt?: string }[] | null;
 };
 
 export async function rest<T>(path: string): Promise<T | null> {
@@ -55,7 +58,10 @@ function toProject(row: ProjectRow): Project {
     status: row.status_note ?? "",
     points: row.highlights ?? [],
     cover: row.cover_url ?? "",
-    screenshots: [],
+    hero: row.hero_url ? { src: row.hero_url, alt: row.hero_alt ?? "" } : null,
+    screenshots: (row.screenshots ?? [])
+      .filter((shot) => shot.url)
+      .map((shot) => ({ src: shot.url, alt: shot.alt ?? "" })),
     seoDescription: row.seo_description ?? row.tagline,
     problem: row.problem,
     users: row.users?.who || row.users?.objective || row.users?.measure
@@ -69,7 +75,7 @@ function toProject(row: ProjectRow): Project {
 }
 
 const PROJECT_COLUMNS =
-  "slug,name,tagline,category,platform,role,status_note,highlights,cover_url,seo_description,problem,users,my_role,decisions,challenges,outcome";
+  "slug,name,tagline,category,platform,role,status_note,highlights,cover_url,seo_description,problem,users,my_role,decisions,challenges,outcome,hero_url,hero_alt,screenshots";
 
 /** Published case studies in display order. Falls back to the local set when none are published. */
 export async function getProjects(): Promise<Project[]> {
@@ -92,10 +98,13 @@ type ServiceRow = {
 };
 
 function toService(row: ServiceRow): Service {
+  // The services table has no summary column yet, so the summary comes from the local service data.
+  const summary = localServices.find((s) => s.slug === row.slug)?.summary ?? row.problem;
   return {
     slug: row.slug,
     name: row.name,
     shortName: row.short_name,
+    summary,
     targetCustomer: row.target_customer,
     problem: row.problem,
     deliverables: row.deliverables ?? [],

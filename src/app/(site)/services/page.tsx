@@ -1,12 +1,9 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { buildMetadata } from "@/lib/metadata";
 import { getServices, getShowPrices } from "@/lib/back-office";
 import { siteConfig, absoluteUrl } from "@/data/site-config";
-import { SectionHeading } from "@/components/ui/SectionHeading";
-import { Breadcrumbs, breadcrumbJsonLd } from "@/components/ui/Breadcrumbs";
 import { JsonLd } from "@/components/ui/JsonLd";
-import { ServiceCard } from "@/components/services/ServiceCard";
-import { CTASection } from "@/components/ui/CTASection";
 
 export const metadata: Metadata = buildMetadata({
   title: "Services",
@@ -15,7 +12,7 @@ export const metadata: Metadata = buildMetadata({
   path: "/services",
 });
 
-const crumbs = [{ label: "Home", href: "/" }, { label: "Services" }];
+const kicker = "text-[11px] font-medium uppercase tracking-[0.34em] text-gold";
 
 export default async function ServicesPage() {
   const services = await getServices();
@@ -32,47 +29,64 @@ export default async function ServicesPage() {
   };
 
   return (
-    <main id="main" className="flex-1">
-      <div className="mx-auto max-w-7xl px-5 pb-6 pt-12 sm:px-8">
-        <Breadcrumbs items={crumbs} />
-      </div>
-      <JsonLd data={breadcrumbJsonLd(crumbs)} />
+    <main id="main" className="flex-1 bg-ivory text-charcoal">
       <JsonLd data={serviceJsonLd} />
 
-      <section aria-labelledby="services-title" className="mx-auto max-w-7xl px-5 py-16 sm:px-8">
-        <SectionHeading
-          as="h1"
-          id="services-title"
-          eyebrow="Services"
-          title="Clear product support, scoped to what you need."
-          intro="Each service has a defined scope and deliverables. Pick the one that matches where you are, or describe your situation and we'll find the right starting point."
-        />
-        <ul className="mt-14 grid gap-6 lg:grid-cols-2">
-          {services.map((service) => (
-            <li key={service.slug} className="flex">
-              <ServiceCard service={service} showDeliverables as="h2" showPrices={showPrices} />
-            </li>
-          ))}
-        </ul>
-        <div className="mt-12 grid gap-6 rounded-lg border border-gold/50 bg-paper p-8 md:grid-cols-2">
-          <div>
-            <h2 className="text-2xl">How pricing works</h2>
-            <p className="mt-3 text-muted">
-              {showPrices
-                ? "Prices shown are indicative starting points, in NGN and USD. They are not converted between currencies."
-                : "Prices are provided on request after a short conversation about your needs."}
-            </p>
-          </div>
-          <div>
-            <h2 className="text-2xl">How to engage</h2>
-            <p className="mt-3 text-muted">
-              Choose a service and send an enquiry. The form keeps your chosen service so the conversation starts from the right place. Fractional engagement hours, availability and responsibilities are agreed before work begins.
-            </p>
-          </div>
-        </div>
+      <section aria-labelledby="services-title" className="px-6 pt-16 md:px-[110px] md:pt-[90px]">
+        <span className={kicker}>Services</span>
+        <h1 id="services-title" className="mt-6 font-display text-[clamp(2.75rem,7vw,6.5rem)] font-normal leading-[1.04] tracking-[-0.01em]">
+          How we can work together.
+        </h1>
+        <p className="mt-10 max-w-[640px] text-lg leading-[1.7] text-[#4A4034] md:text-[19px]">
+          Each service has a defined scope and deliverables. Pick the one that matches where you are, or describe your situation and we&apos;ll find the right starting point.
+        </p>
       </section>
 
-      <CTASection headline="Not sure which service fits?" body="Describe where your product is today and we'll talk through the best next step." ctaLabel="Start a Conversation" ctaHref="/contact" />
+      <section className="mt-16 px-6 md:mt-[110px] md:px-[110px]">
+        <ol className="border-t border-[rgba(28,24,19,0.18)]">
+          {services.map((service, index) => (
+            <li
+              key={service.slug}
+              className="grid gap-6 border-b border-[rgba(28,24,19,0.18)] py-10 md:grid-cols-[4fr_8fr] md:gap-20 md:py-16"
+            >
+              <div className="flex flex-col gap-4">
+                <span className={kicker}>{String(index + 1).padStart(2, "0")}</span>
+                <h2 className="font-display text-[30px] leading-[1.12] md:text-[48px] md:leading-[1.08]">{service.name}</h2>
+              </div>
+              <div className="flex flex-col gap-6 md:gap-7">
+                <p className="max-w-[620px] text-base leading-[1.7] text-[#4A4034] md:text-[19px]">{service.summary}</p>
+                {showPrices ? (
+                  <p className="text-sm text-charcoal">
+                    {service.price.ngn} · {service.price.usd}
+                    {service.price.unit ? ` ${service.price.unit}` : ""}
+                  </p>
+                ) : null}
+                <Link
+                  href={`/contact?service=${encodeURIComponent(service.enquiryValue)}`}
+                  className="self-start text-sm text-gold underline underline-offset-8"
+                >
+                  Request this service →
+                </Link>
+              </div>
+            </li>
+          ))}
+        </ol>
+        {showPrices ? (
+          <p className="mt-6 text-sm text-[#4A4034]">
+            Prices are indicative starting points, in NGN and USD. They are not converted between currencies.
+          </p>
+        ) : null}
+      </section>
+
+      <section className="mx-6 mt-24 flex flex-col gap-8 bg-gold px-8 py-16 text-ivory md:mx-[110px] md:mt-[150px] md:flex-row md:items-center md:justify-between md:gap-15 md:px-[90px] md:py-[110px]">
+        <h2 className="max-w-[760px] font-display text-[clamp(2.5rem,5vw,4rem)] font-normal leading-[1.05]">Not sure which service fits?</h2>
+        <Link
+          href="/contact"
+          className="inline-flex h-14 shrink-0 items-center bg-ivory px-10 text-[15px] font-medium text-charcoal hover:bg-sand md:h-[60px]"
+        >
+          Start a Conversation
+        </Link>
+      </section>
     </main>
   );
 }

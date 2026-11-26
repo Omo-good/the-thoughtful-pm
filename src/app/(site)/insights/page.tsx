@@ -5,8 +5,7 @@ import { buildMetadata } from "@/lib/metadata";
 import { searchInsights } from "@/lib/content";
 import { getFeaturedInsightMeta, getInsightList } from "@/lib/insights-source";
 import { insightCategories, categoryLabel } from "@/data/content-categories";
-import { SectionHeading } from "@/components/ui/SectionHeading";
-import { Breadcrumbs, breadcrumbJsonLd } from "@/components/ui/Breadcrumbs";
+import { breadcrumbJsonLd } from "@/components/ui/Breadcrumbs";
 import { JsonLd } from "@/components/ui/JsonLd";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { ArticleCard } from "@/components/insights/ArticleCard";
@@ -57,14 +56,14 @@ async function InsightsResults({ searchParams }: { searchParams: SearchParams })
   const visible = results.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
 
   return (
-      <section aria-labelledby="insights-title" className="mx-auto max-w-7xl px-5 py-16 sm:px-8">
-        <SectionHeading
-          as="h1"
-          id="insights-title"
-          eyebrow="Insights"
-          title="Thinking about products, people and the work of building them."
-          intro="Notes on Product Management, startups, teams and the African technology ecosystem."
-        />
+      <section aria-labelledby="insights-title" className="px-6 pb-24 pt-16 md:px-[110px] md:pt-[90px]">
+        <span className="text-[11px] font-medium uppercase tracking-[0.34em] text-gold">Insights</span>
+        <h1 id="insights-title" className="mt-6 font-display text-[clamp(2.75rem,6vw,5.5rem)] font-normal leading-[1.04]">
+          Notes on building better products.
+        </h1>
+        <p className="mt-8 max-w-[640px] text-lg leading-[1.7] text-[#4A4034]">
+          Lessons from real product experiences, on strategy, discovery, requirements and leading product work.
+        </p>
 
         {all.length === 0 ? (
           <div className="mt-14">
@@ -78,7 +77,7 @@ async function InsightsResults({ searchParams }: { searchParams: SearchParams })
         ) : (
           <>
             {!isFiltered && featured ? (
-              <article aria-labelledby="featured-article" className="card mt-14 grid gap-6 p-8 md:grid-cols-5 md:p-10">
+              <article aria-labelledby="featured-article" className="mt-14 grid gap-6 border-t border-[rgba(28,24,19,0.18)] pt-10 md:grid-cols-5">
                 <div className="flex flex-col gap-4 md:col-span-3">
                   <p className="eyebrow">Featured · {categoryLabel(featured.category)}</p>
                   <h2 id="featured-article" className="text-4xl">
@@ -99,13 +98,13 @@ async function InsightsResults({ searchParams }: { searchParams: SearchParams })
                 <label htmlFor="q" className="block font-medium">
                   Search articles
                 </label>
-                <input id="q" name="q" type="search" defaultValue={q} className="mt-2 w-full min-h-11 rounded-md border border-gold/70 bg-paper px-3.5 py-2.5" />
+                <input id="q" name="q" type="search" defaultValue={q} className="mt-2 w-full min-h-11 border border-[rgba(28,24,19,0.22)] bg-white px-4 py-2.5" />
               </div>
               <div>
                 <label htmlFor="category" className="block font-medium">
                   Category
                 </label>
-                <select id="category" name="category" defaultValue={requestedCategory ?? ""} className="mt-2 min-h-11 w-full rounded-md border border-gold/70 bg-paper px-3.5 py-2.5 md:w-auto">
+                <select id="category" name="category" defaultValue={requestedCategory ?? ""} className="mt-2 min-h-11 w-full border border-[rgba(28,24,19,0.22)] bg-white px-4 py-2.5 md:w-auto">
                   <option value="">All categories</option>
                   {insightCategories.map((category) => (
                     <option key={category.slug} value={category.slug}>
@@ -114,7 +113,7 @@ async function InsightsResults({ searchParams }: { searchParams: SearchParams })
                   ))}
                 </select>
               </div>
-              <button type="submit" className="min-h-11 rounded-md bg-teal px-6 py-2.5 font-medium text-paper hover:bg-charcoal">
+              <button type="submit" className="min-h-11 bg-gold px-6 py-2.5 font-medium text-ivory hover:bg-gold-deep">
                 Apply
               </button>
             </form>
@@ -176,10 +175,7 @@ async function InsightsResults({ searchParams }: { searchParams: SearchParams })
 
 export default function InsightsPage({ searchParams }: { searchParams: SearchParams }) {
   return (
-    <main id="main" className="flex-1">
-      <div className="mx-auto max-w-7xl px-5 pb-6 pt-12 sm:px-8">
-        <Breadcrumbs items={crumbs} />
-      </div>
+    <main id="main" className="flex-1 bg-ivory text-charcoal">
       <JsonLd data={breadcrumbJsonLd(crumbs)} />
       {/* Search and filter params are request-time data, so results stream behind this boundary. */}
       <Suspense fallback={<Loading label="Loading articles…" />}>

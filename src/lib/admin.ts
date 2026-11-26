@@ -59,3 +59,27 @@ export async function signInWithPassword(email: string, password: string) {
   if (!res.ok) return null;
   return (await res.json()) as { access_token: string; expires_in: number };
 }
+
+export const CASE_IMAGE_BUCKET = "case-images";
+const MAX_IMAGE_BYTES = 8 * 1024 * 1024;
+
+/** Uploads an image to the public case-images bucket as the signed-in owner. Returns its public URL, or null. */
+export async function uploadCaseImage(token: string, slug: string, file: File): Promise<string | null> {
+  if (!file.type.startsWith("image/") || file.size === 0 || file.size > MAX_IMAGE_BYTES) return null;
+  const safeName = file.name.toLowerCase().replace(/[^a-z0-9.]+/g, "-").slice(-80) || "image";
+  const path = `${encodeURIComponent(slug)}/${Date.now()}-${safeName}`;
+  const res = await fetch(`${URL_BASE}/storage/v1/object/${CASE_IMAGE_BUCKET}/${path}`, {
+    method: "POST",
+    headers: {
+      apikey: KEY,
+      Authorization: `Bearer ${token}`,
+      "Content-Type": file.type,
+      "Cache-Control": "max-age=31536000",
+      "x-upsert": "false",
+    },
+    body: await file.arrayBuffer(),
+    cache: "no-store",
+  });
+  if (!res.ok) return null;
+  return `${URL_BASE}/storage/v1/object/public/${CASE_IMAGE_BUCKET}/${path}`;
+}

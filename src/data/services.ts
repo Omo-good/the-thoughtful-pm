@@ -12,6 +12,8 @@ export interface Service {
   slug: string;
   name: string;
   shortName: string;
+  /** One-line summary shown on the Services page. */
+  summary: string;
   targetCustomer: string;
   problem: string;
   deliverables: string[];
@@ -28,6 +30,7 @@ export const services: Service[] = [
     slug: "prd-requirements-sprint",
     name: "PRD & Requirements Sprint",
     shortName: "PRD Sprint",
+    summary: "Turn a product idea into clear requirements that developers and designers can build from.",
     targetCustomer: "Founders and development teams with product ideas or poorly documented requirements.",
     problem: "Unclear requirements lead to confusion, misalignment and inefficient development.",
     deliverables: [
@@ -52,6 +55,7 @@ export const services: Service[] = [
     slug: "product-discovery-mvp",
     name: "Product Discovery & MVP Planning",
     shortName: "Discovery & MVP",
+    summary: "Understand the problem you're solving, find the opportunities worth pursuing, and decide what the first release should contain.",
     targetCustomer: "Founders preparing to build a digital product.",
     problem: "Unclear product requirements and difficulty defining MVP scope.",
     deliverables: [
@@ -75,6 +79,7 @@ export const services: Service[] = [
     slug: "product-audit",
     name: "Product Audit",
     shortName: "Product Audit",
+    summary: "Review an existing digital product and identify what to improve first.",
     targetCustomer: "Businesses with existing digital products.",
     problem: "Poor product experience and unclear product direction.",
     deliverables: [
@@ -96,6 +101,7 @@ export const services: Service[] = [
     slug: "fractional-product-management",
     name: "Fractional Product Management",
     shortName: "Fractional PM",
+    summary: "Ongoing product direction and execution support, without hiring a full-time Product Manager.",
     targetCustomer: "Startups and growing businesses that need ongoing Product Management support.",
     problem: "Limited Product Management resources and uncertainty about prioritisation.",
     deliverables: [

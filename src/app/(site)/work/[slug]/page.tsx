@@ -1,13 +1,8 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { buildMetadata } from "@/lib/metadata";
 import { getProjects, getProjectBySlug } from "@/lib/back-office";
-import { Breadcrumbs, breadcrumbJsonLd } from "@/components/ui/Breadcrumbs";
-import { JsonLd } from "@/components/ui/JsonLd";
-import { ProjectGallery } from "@/components/portfolio/ProjectGallery";
-import { CTASection } from "@/components/ui/CTASection";
 
 export async function generateStaticParams() {
   const projects = await getProjects();
@@ -23,11 +18,18 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
   return buildMetadata({ title: `${project.name} case study`, description: project.seoDescription, path: `/work/${project.slug}` });
 }
 
-function CaseSection({ id, title, children }: { id: string; title: string; children: React.ReactNode }) {
+const kicker = "text-[11px] font-medium uppercase tracking-[0.34em] text-gold";
+const placeholder = "bg-[linear-gradient(160deg,#E8D9BE,#C9A774)]";
+const bigText = "font-display text-[clamp(1.75rem,3vw,2.5rem)] leading-[1.25]";
+
+// Every section always renders, as on the approved board. Empty fields show the board's bracketed prompts.
+function Section({ id, label, children }: { id: string; label: string; children: React.ReactNode }) {
   return (
-    <section aria-labelledby={id} className="mt-14">
-      <h2 id={id} className="eyebrow">{title}</h2>
-      <div className="mt-5 max-w-3xl">{children}</div>
+    <section id={id} aria-labelledby={`${id}-label`} className="scroll-mt-24 grid gap-8 border-t border-[rgba(28,24,19,0.18)] py-14 md:grid-cols-[4fr_8fr] md:gap-20 md:py-20">
+      <span id={`${id}-label`} className={`${kicker} md:pt-2`}>
+        {label}
+      </span>
+      <div>{children}</div>
     </section>
   );
 }
@@ -39,158 +41,158 @@ export default async function CaseStudyPage({ params }: { params: Params }) {
 
   const projects = await getProjects();
   const index = projects.findIndex((p) => p.slug === project.slug);
-  const previous = index > 0 ? projects[index - 1] : null;
-  const next = index < projects.length - 1 ? projects[index + 1] : null;
-  const crumbs = [{ label: "Home", href: "/" }, { label: "Work", href: "/work" }, { label: project.name }];
+  const next = projects.length > 1 ? projects[(index + 1) % projects.length] : null;
+
+  const decisions = project.decisions ?? [];
+  // The approved board shows three decision rows, so pad with placeholders up to three.
+  const decisionRows = Array.from({ length: Math.max(3, decisions.length) }, (_, i) => decisions[i] ?? { title: "[Decision]", why: "[Why it was made.]" });
+
+  const jump: [string, string][] = [
+    ["problem", "Problem"],
+    ["users", "Users and goals"],
+    ["role", "My role"],
+    ["decisions", "Key decisions"],
+    ["screens", "Product screens"],
+    ["lessons", "Challenges and lessons"],
+    ["outcome", "Outcome"],
+  ];
 
   return (
-    <main id="main" className="flex-1">
-      <div className="mx-auto max-w-5xl px-5 pb-4 pt-12 sm:px-8">
-        <Breadcrumbs items={crumbs} />
-      </div>
-      <JsonLd data={breadcrumbJsonLd(crumbs)} />
-
-      <article aria-labelledby="case-title" className="mx-auto max-w-5xl px-5 pb-16 sm:px-8">
-        <header className="grid gap-10 md:grid-cols-2 md:items-center">
-          <div className="flex flex-col gap-5">
-            <p className="eyebrow">{project.tag}</p>
-            <h1 id="case-title">{project.name}</h1>
-            <p className="text-lg text-charcoal/90">{project.tagline}</p>
-          </div>
-          <div className="card overflow-hidden">
-            <Image
-              src={project.cover}
-              alt=""
-              width={1200}
-              height={900}
-              unoptimized
-              priority
-              sizes="(min-width: 768px) 50vw, 100vw"
-              className="aspect-[4/3] h-auto w-full object-cover"
-            />
-          </div>
-        </header>
-
-        <dl className="mt-12 grid gap-6 border-t border-gold/40 pt-8 text-sm sm:grid-cols-3">
-          <div>
-            <dt className="font-medium text-charcoal">My role</dt>
-            <dd className="mt-1 text-muted">{project.role}</dd>
-          </div>
-          {project.platform ? (
+    <main id="main" className="flex-1 overflow-x-clip bg-ivory text-charcoal">
+      <section className="px-6 pt-12 md:px-[110px] md:pt-[80px]">
+        <Link href="/work" className="text-sm text-gold underline underline-offset-8">
+          ← All work
+        </Link>
+        <span className={`${kicker} mt-12 block`}>
+          {project.tag} · {project.role}
+        </span>
+        <h1 className="mt-4 font-display text-[clamp(4.5rem,11vw,10rem)] font-normal leading-[0.95] tracking-[-0.02em]">{project.name}</h1>
+        <div className="mt-10 grid gap-10 border-t border-[rgba(28,24,19,0.18)] pt-10 md:grid-cols-[7fr_5fr] md:items-start md:gap-20">
+          <p className="font-display text-[clamp(1.5rem,2.4vw,2.25rem)] italic leading-[1.35] text-charcoal">{project.tagline}</p>
+          <dl className="grid gap-6 text-[15px] md:grid-cols-3">
             <div>
-              <dt className="font-medium text-charcoal">Platform</dt>
-              <dd className="mt-1 text-muted">{project.platform}</dd>
+              <dt className={kicker}>Role</dt>
+              <dd className="mt-2">{project.role}</dd>
             </div>
-          ) : null}
-          <div className={project.platform ? "" : "sm:col-span-2"}>
-            <dt className="font-medium text-charcoal">Status</dt>
-            <dd className="mt-1 text-muted">{project.status}</dd>
+            <div>
+              <dt className={kicker}>Status</dt>
+              <dd className="mt-2">{project.status}</dd>
+            </div>
+            <div>
+              <dt className={kicker}>Platform</dt>
+              <dd className="mt-2">{project.platform || "[Platform]"}</dd>
+            </div>
+          </dl>
+        </div>
+        <nav aria-label="Jump to section" className="mt-10 flex flex-wrap gap-x-8 gap-y-3 border-y border-[rgba(28,24,19,0.18)] py-5 text-sm">
+          {jump.map(([id, label]) => (
+            <a key={id} href={`#${id}`} className="text-[#4A4034] hover:text-gold">
+              {label}
+            </a>
+          ))}
+        </nav>
+      </section>
+
+      {/* Full-width hero. Uses the uploaded hero image, or a placeholder until one is added in the back office. */}
+      {project.hero ? (
+        <section className="relative left-1/2 mt-12 h-[220px] w-screen -translate-x-1/2 overflow-hidden md:h-[min(78vh,820px)]">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={project.hero.src} alt={project.hero.alt} className="h-full w-full object-cover" />
+        </section>
+      ) : (
+        <section className={`relative left-1/2 mt-12 flex h-[220px] w-screen -translate-x-1/2 items-end md:h-[min(78vh,820px)] ${placeholder} p-8 md:p-12`}>
+          <span className="text-[11px] uppercase tracking-[0.2em] text-[#5C5244]">Hero image · 2400 × 1350 px minimum, full width</span>
+        </section>
+      )}
+
+      <div className="px-6 md:px-[110px]">
+        <Section id="problem" label="Problem">
+          <p className={bigText}>{project.problem || "[What was not working, in one or two sentences.]"}</p>
+        </Section>
+
+        <Section id="users" label="Users and goals">
+          <dl className="grid gap-8 md:grid-cols-3">
+            {[
+              ["Who", project.users?.who || "[Target users]"],
+              ["Objective", project.users?.objective || "[Product objective]"],
+              ["Measure", project.users?.measure || "[What success looked like]"],
+            ].map(([label, value]) => (
+              <div key={label}>
+                <dt className={kicker}>{label}</dt>
+                <dd className="mt-3 font-display text-[22px] leading-[1.35]">{value}</dd>
+              </div>
+            ))}
+          </dl>
+        </Section>
+
+        <Section id="role" label="My role">
+          <div className="flex flex-col gap-10">
+            <p className={bigText}>{project.myRole || "[What you personally defined, decided and delivered.]"}</p>
+            <div className="h-[240px] bg-[#2B2116] md:h-[460px]" aria-hidden="true" />
           </div>
-        </dl>
+        </Section>
 
-        {project.problem ? (
-          <CaseSection id="problem-heading" title="The problem">
-            <p className="text-lg leading-relaxed text-charcoal/90">{project.problem}</p>
-          </CaseSection>
-        ) : null}
-
-        {project.users ? (
-          <CaseSection id="users-heading" title="Who it was for">
-            <dl className="grid gap-6 sm:grid-cols-3">
-              {[
-                ["Who", project.users.who],
-                ["Objective", project.users.objective],
-                ["Measure of success", project.users.measure],
-              ]
-                .filter(([, value]) => value)
-                .map(([label, value]) => (
-                  <div key={label}>
-                    <dt className="text-sm font-medium text-charcoal">{label}</dt>
-                    <dd className="mt-1 text-muted">{value}</dd>
-                  </div>
-                ))}
-            </dl>
-          </CaseSection>
-        ) : null}
-
-        {project.myRole ? (
-          <CaseSection id="role-heading" title="My role">
-            <p className="leading-relaxed text-charcoal/90">{project.myRole}</p>
-          </CaseSection>
-        ) : null}
-
-        {project.decisions && project.decisions.length > 0 ? (
-          <CaseSection id="decisions-heading" title="Key decisions">
-            <ol className="grid gap-8">
-              {project.decisions.map((decision, i) => (
-                <li key={decision.title} className="grid gap-2 border-t border-gold/40 pt-6 sm:grid-cols-[3rem_1fr]">
-                  <span className="font-display text-2xl text-gold-deep">{String(i + 1).padStart(2, "0")}</span>
-                  <div>
-                    <h3 className="text-xl">{decision.title}</h3>
-                    {decision.why ? <p className="mt-2 leading-relaxed text-muted">{decision.why}</p> : null}
-                  </div>
-                </li>
-              ))}
-            </ol>
-          </CaseSection>
-        ) : null}
-
-        {project.challenges ? (
-          <CaseSection id="challenges-heading" title="Challenges">
-            <p className="leading-relaxed text-charcoal/90">{project.challenges}</p>
-          </CaseSection>
-        ) : null}
-
-        {project.outcome ? (
-          <CaseSection id="outcome-heading" title="Outcome">
-            <p className="leading-relaxed text-charcoal/90">{project.outcome}</p>
-          </CaseSection>
-        ) : null}
-
-        <section aria-labelledby="highlights-heading" className="mt-12">
-          <h2 id="highlights-heading" className="sr-only">
-            Highlights
-          </h2>
-          <ul className="grid gap-4 md:grid-cols-3">
-            {project.points.map((point) => (
-              <li key={point} className="card p-6 text-charcoal">
-                {point}
+        <Section id="decisions" label="Key decisions">
+          <ol className="border-t border-[rgba(28,24,19,0.14)]">
+            {decisionRows.map((decision, i) => (
+              <li key={`${i}-${decision.title}`} className="grid gap-3 border-b border-[rgba(28,24,19,0.14)] py-8 md:grid-cols-[88px_1fr] md:gap-6">
+                <span className="font-display text-[28px] italic text-gold">{String(i + 1).padStart(2, "0")}</span>
+                <div>
+                  <h3 className="font-display text-[clamp(1.75rem,2.6vw,2.25rem)] leading-[1.2]">{decision.title}</h3>
+                  <p className="mt-3 text-[17px] leading-[1.7] text-[#4A4034]">{decision.why || "[Why it was made.]"}</p>
+                </div>
               </li>
             ))}
-          </ul>
-        </section>
+          </ol>
+        </Section>
 
-        {project.screenshots.length > 0 ? (
-          <section aria-labelledby="gallery-heading" className="mt-16">
-            <h2 id="gallery-heading" className="text-3xl">
-              Screens
-            </h2>
-            <div className="mt-6">
-              <ProjectGallery screenshots={project.screenshots} name={project.name} />
+        <Section id="screens" label="Product screens">
+          <div className="flex flex-col gap-6">
+            {project.screenshots[0] ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={project.screenshots[0].src} alt={project.screenshots[0].alt} className="aspect-[4/3] w-full object-cover" />
+            ) : (
+              <div className={`flex aspect-[4/3] w-full items-end ${placeholder} p-6 text-[11px] uppercase tracking-[0.2em] text-[#5C5244]`}>
+                Product screen · 1600 × 1200 px minimum
+              </div>
+            )}
+            <div className="grid gap-6 md:grid-cols-2">
+              {[1, 2].map((n) =>
+                project.screenshots[n] ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img key={n} src={project.screenshots[n].src} alt={project.screenshots[n].alt} className="aspect-[4/3] w-full object-cover md:aspect-[4/5]" />
+                ) : (
+                  <div key={n} className={`flex aspect-[4/3] items-end md:aspect-[4/5] ${placeholder} p-5 text-[11px] uppercase tracking-[0.2em] text-[#5C5244]`}>
+                    Product screen · 1600 × 1200 px minimum
+                  </div>
+                ),
+              )}
             </div>
-          </section>
-        ) : null}
-      </article>
+          </div>
+        </Section>
 
-      <nav aria-label="Case study navigation" className="mx-auto flex max-w-5xl flex-col gap-4 border-t border-gold/40 px-5 py-10 sm:flex-row sm:items-center sm:justify-between sm:px-8">
-        <Link href="/work" className="font-medium text-teal hover:underline">
-          ← Back to Work
-        </Link>
-        <div className="flex gap-6 text-sm">
-          {previous ? (
-            <Link href={`/work/${previous.slug}`} className="text-teal hover:underline">
-              ← {previous.name}
-            </Link>
-          ) : null}
-          {next ? (
-            <Link href={`/work/${next.slug}`} className="text-teal hover:underline">
+        <Section id="lessons" label="Challenges and lessons">
+          <p className={bigText}>{project.challenges || "[One challenge and one lesson, in plain words.]"}</p>
+        </Section>
+
+        <Section id="outcome" label="Outcome">
+          <p className={`${bigText} italic text-gold-deep`}>{project.outcome || "[Current status, stated as it is.]"}</p>
+        </Section>
+      </div>
+
+      <section className="mt-4 flex flex-col gap-8 border-t border-[rgba(28,24,19,0.18)] px-6 py-16 md:flex-row md:items-end md:justify-between md:px-[110px] md:py-20">
+        {next && next.slug !== project.slug ? (
+          <div className="flex flex-col gap-4">
+            <span className={kicker}>Next case study</span>
+            <Link href={`/work/${next.slug}`} className="font-display text-[clamp(3.5rem,8vw,7rem)] leading-none hover:text-gold">
               {next.name} →
             </Link>
-          ) : null}
-        </div>
-      </nav>
-
-      <CTASection headline="Facing something similar?" ctaLabel="Work With Me" ctaHref="/contact" />
+          </div>
+        ) : null}
+        <Link href="/work" className="text-sm text-gold underline underline-offset-8">
+          ← All work
+        </Link>
+      </section>
     </main>
   );
 }

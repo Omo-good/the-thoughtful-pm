@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { buildMetadata } from "@/lib/metadata";
-import { SectionHeading } from "@/components/ui/SectionHeading";
-import { Breadcrumbs, breadcrumbJsonLd } from "@/components/ui/Breadcrumbs";
 import { JsonLd } from "@/components/ui/JsonLd";
-import { CTASection } from "@/components/ui/CTASection";
+import { siteConfig, absoluteUrl } from "@/data/site-config";
 
 export const metadata: Metadata = buildMetadata({
   title: "About",
@@ -12,113 +11,80 @@ export const metadata: Metadata = buildMetadata({
   path: "/about",
 });
 
-const crumbs = [{ label: "Home", href: "/" }, { label: "About" }];
+const kicker = "text-[11px] font-medium uppercase tracking-[0.34em] text-gold";
 
-const background = [
-  "Product Management experience.",
-  "Industrial Chemistry academic background.",
-  "Product Management training through AltSchool Africa.",
-  "Work on digital product initiatives.",
-  "Experience collaborating with design and development teams.",
-  "Experience using AI-assisted development tools.",
+const expertise = [
+  "Product Strategy",
+  "Product Discovery",
+  "Requirements Engineering",
+  "MVP Definition and Planning",
+  "Product Roadmapping",
+  "Feature Prioritisation",
+  "User Journey Mapping",
+  "Stakeholder Management",
+  "Product Delivery Coordination",
+  "AI-Assisted Product Execution",
 ];
 
-const philosophy = [
-  "Problem understanding.",
-  "User empathy.",
-  "Strategic thinking.",
-  "Systems thinking.",
-  "Prioritisation.",
-  "Communication.",
-  "Continuous learning.",
-];
-
-const interests = [
-  "Product Strategy.",
-  "Human-Centred Design.",
-  "AI and Product Management.",
-  "Startup Development.",
-  "Product Operations.",
-  "African Technology Ecosystem.",
-  "Product Thinking and Systems.",
-];
-
-const principles = [
-  "Understand before solving.",
-  "People before features.",
-  "Clarity before execution.",
-  "Evidence before assumptions.",
-  "Outcomes over output.",
-  "Thoughtful collaboration.",
-];
+const personJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: siteConfig.professionalName,
+  jobTitle: siteConfig.professionalTitle,
+  url: absoluteUrl("/about"),
+};
 
 export default function AboutPage() {
   return (
-    <main id="main" className="flex-1">
-      <div className="mx-auto max-w-4xl px-5 pb-6 pt-12 sm:px-8">
-        <Breadcrumbs items={crumbs} />
-      </div>
-      <JsonLd data={breadcrumbJsonLd(crumbs)} />
+    <main id="main" className="flex-1 bg-ivory text-charcoal">
+      <JsonLd data={personJsonLd} />
 
-      <section aria-labelledby="about-intro" className="mx-auto max-w-4xl px-5 py-16 sm:px-8">
-        <SectionHeading as="h1" id="about-intro" eyebrow="About" title="Hi, I'm Goodness, your Thoughtful PM." />
-        <p className="mt-8 text-lg text-charcoal/90">
-          The Thoughtful PM is the expression of my professional philosophy, experiences and perspectives on building products.
-        </p>
+      {/* Portrait with the gold block offset behind it. Replace the placeholder with the approved portrait (at least 1600 × 2000 px). */}
+      <section className="grid gap-10 px-6 pt-16 md:mx-[110px] md:mt-[90px] md:grid-cols-[5fr_7fr] md:gap-[90px] md:px-0 md:pt-0">
+        <div className="relative h-[420px] w-full md:h-[720px]">
+          <div className="absolute bottom-[-28px] left-[-28px] h-[82%] w-[70%] bg-gold md:bottom-[-28px] md:left-[-28px]" />
+          <div className="absolute right-0 top-0 flex h-[94%] w-[88%] items-end bg-[linear-gradient(170deg,#E8D9BE,#C9A774)] p-8 md:p-[30px]">
+            <span className="font-display text-xl italic text-[#2B2116] md:text-[20px]">
+              Portrait
+              <span className="block font-sans text-xs not-italic">1600 × 2000 px minimum</span>
+            </span>
+          </div>
+        </div>
+        <div className="flex flex-col gap-8">
+          <span className={kicker}>About</span>
+          <h1 className="font-display text-[clamp(2.5rem,5vw,4.5rem)] font-normal leading-[1.08]">Products are built by people, for people.</h1>
+          <p className="text-lg leading-[1.75] text-[#4A4034] md:text-xl">
+            Hi, I&apos;m Goodness, a Product Manager who believes building great products starts with asking better questions, understanding people and bringing clarity to complex problems.
+          </p>
+          <p className="text-lg leading-[1.75] text-[#4A4034] md:text-xl">
+            I believe good Product Management goes beyond managing backlogs and writing requirements. It involves understanding problems, asking meaningful questions, making informed decisions and helping teams create solutions that matter.
+          </p>
+        </div>
       </section>
 
-      <section aria-labelledby="background-heading" className="mx-auto max-w-4xl border-t border-gold/40 px-5 py-16 sm:px-8">
-        <h2 id="background-heading" className="text-3xl">
-          Professional background
-        </h2>
-        <ul className="mt-6 grid list-disc gap-3 pl-6 text-lg text-charcoal/90 marker:text-gold">
-          {background.map((item) => (
-            <li key={item}>{item}</li>
-          ))}
-        </ul>
+      <section className="mt-20 px-6 md:mt-[150px] md:px-[110px]">
+        <div className="border-t border-[rgba(28,24,19,0.18)] pt-12 md:pt-16">
+          <div className="flex flex-col gap-4">
+            <span className={kicker}>Expertise</span>
+            <h2 className="font-display text-[clamp(2rem,4vw,3.25rem)] font-normal">Where I add the most value</h2>
+          </div>
+          <ol className="mt-10 grid gap-x-16 md:grid-cols-2">
+            {expertise.map((item, index) => (
+              <li key={item} className="flex items-baseline gap-6 border-b border-[rgba(28,24,19,0.14)] py-5">
+                <span className="w-7 font-display text-base text-gold">{String(index + 1).padStart(2, "0")}</span>
+                <span className="text-lg">{item}</span>
+              </li>
+            ))}
+          </ol>
+        </div>
       </section>
 
-      <section aria-labelledby="philosophy-heading" className="mx-auto max-w-4xl border-t border-gold/40 px-5 py-16 sm:px-8">
-        <h2 id="philosophy-heading" className="text-3xl">
-          Product Management philosophy
-        </h2>
-        <p className="mt-6 text-lg text-charcoal/90">
-          Product Management involves more than feature delivery. It is about understanding the problem, making informed decisions and helping teams create solutions that matter. The areas I focus on include:
-        </p>
-        <ul className="mt-6 grid gap-2 sm:grid-cols-2">
-          {philosophy.map((item) => (
-            <li key={item} className="card px-5 py-3 text-charcoal">
-              {item.replace(/\.$/, "")}
-            </li>
-          ))}
-        </ul>
+      <section className="mx-6 mt-20 flex flex-col items-start gap-8 bg-gold px-8 py-16 text-ivory md:mx-[110px] md:mt-[150px] md:flex-row md:items-center md:justify-between md:px-[90px] md:py-[110px]">
+        <h2 className="font-display text-[clamp(2.5rem,5vw,4.5rem)] font-normal leading-[1.05]">Let&apos;s build something meaningful.</h2>
+        <Link href="/contact" className="inline-flex h-14 shrink-0 items-center bg-ivory px-10 text-[15px] font-medium text-charcoal hover:bg-sand md:h-[60px]">
+          Work With Me
+        </Link>
       </section>
-
-      <section aria-labelledby="interests-heading" className="mx-auto max-w-4xl border-t border-gold/40 px-5 py-16 sm:px-8">
-        <h2 id="interests-heading" className="text-3xl">
-          Areas of interest
-        </h2>
-        <ul className="mt-6 flex flex-wrap gap-3">
-          {interests.map((item) => (
-            <li key={item} className="rounded-full border border-teal/40 px-4 py-2 text-teal">
-              {item.replace(/\.$/, "")}
-            </li>
-          ))}
-        </ul>
-      </section>
-
-      <section aria-labelledby="principles-about" className="mx-auto max-w-4xl border-t border-gold/40 px-5 py-16 sm:px-8">
-        <h2 id="principles-about" className="text-3xl">
-          Working principles
-        </h2>
-        <ol className="mt-6 grid list-decimal gap-3 pl-6 text-lg text-charcoal/90 marker:font-display marker:text-gold">
-          {principles.map((item) => (
-            <li key={item}>{item.replace(/\.$/, "")}</li>
-          ))}
-        </ol>
-      </section>
-
-      <CTASection headline="Let's build something meaningful." body="Tell me what you're working on and we can explore whether I can help." ctaLabel="Work With Me" ctaHref="/contact" secondaryLabel="Explore Services" secondaryHref="/services" />
     </main>
   );
 }

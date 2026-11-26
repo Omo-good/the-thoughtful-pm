@@ -49,6 +49,7 @@ export interface EnquiryInput {
   fullName?: unknown;
   email?: unknown;
   company?: unknown;
+  building?: unknown;
   website?: unknown;
   location?: unknown;
   serviceRequired?: unknown;
@@ -65,6 +66,7 @@ export interface Enquiry {
   fullName: string;
   email: string;
   company: string;
+  building: string;
   website: string;
   location: string;
   serviceRequired: string;
@@ -110,6 +112,7 @@ export function validateEnquiry(input: EnquiryInput): ValidationResult {
   const fullName = text(input.fullName, 120);
   const email = text(input.email, 254);
   const company = text(input.company, 160);
+  const building = text(input.building, 300);
   const websiteRaw = text(input.website, 300);
   const location = text(input.location, 120);
   const serviceRequired = text(input.serviceRequired, 120);
@@ -153,6 +156,7 @@ export function validateEnquiry(input: EnquiryInput): ValidationResult {
       fullName,
       email,
       company,
+      building,
       website,
       location,
       serviceRequired,

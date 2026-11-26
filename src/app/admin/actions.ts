@@ -3,7 +3,7 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
-import { ADMIN_COOKIE, adminRest, requireToken, signInWithPassword } from "@/lib/admin";
+import { ADMIN_COOKIE, adminRest, requireToken, signInWithPassword, uploadCaseImage } from "@/lib/admin";
 
 export async function signIn(formData: FormData) {
   const email = String(formData.get("email") ?? "").trim();
@@ -51,9 +51,51 @@ function lines(value: FormDataEntryValue | null): string[] {
     .filter(Boolean);
 }
 
+function fileOf(value: FormDataEntryValue | null): File | null {
+  return value && typeof value !== "string" && value.size > 0 ? value : null;
+}
+
+type Shot = { url: string; alt: string };
+
+function parseShots(value: FormDataEntryValue | null): Shot[] {
+  try {
+    const parsed = JSON.parse(String(value ?? "[]")) as unknown;
+    if (!Array.isArray(parsed)) return [];
+    return parsed
+      .filter((s): s is Shot => typeof s?.url === "string" && s.url.length > 0)
+      .map((s) => ({ url: s.url, alt: typeof s.alt === "string" ? s.alt : "" }));
+  } catch {
+    return [];
+  }
+}
+
 export async function saveProject(formData: FormData) {
   const token = await requireToken();
   const slug = String(formData.get("slug") ?? "");
+
+  // Images: a new upload replaces the URL; otherwise the typed or current URL is kept.
+  let coverUrl = String(formData.get("cover_url") ?? "").trim() || null;
+  const coverFile = fileOf(formData.get("cover_file"));
+  if (coverFile) coverUrl = (await uploadCaseImage(token, slug, coverFile)) ?? coverUrl;
+
+  let heroUrl = String(formData.get("hero_url_current") ?? "").trim() || null;
+  if (formData.get("clear_hero") === "on") heroUrl = null;
+  const heroFile = fileOf(formData.get("hero_file"));
+  if (heroFile) heroUrl = (await uploadCaseImage(token, slug, heroFile)) ?? heroUrl;
+
+  const shots: Shot[] = parseShots(formData.get("screenshots_json"))
+    .flatMap((shot, i) =>
+      formData.get(`shot_remove_${i}`) === "on"
+        ? []
+        : [{ url: shot.url, alt: String(formData.get(`shot_alt_${i}`) ?? shot.alt).trim() }],
+    );
+  for (const value of formData.getAll("screenshot_files")) {
+    if (shots.length >= 8) break;
+    const file = fileOf(value);
+    if (!file) continue;
+    const url = await uploadCaseImage(token, slug, file);
+    if (url) shots.push({ url, alt: "" });
+  }
 
   // One decision per line, written as "Title | Why it mattered".
   const decisions = lines(formData.get("decisions"))
@@ -73,8 +115,11 @@ export async function saveProject(formData: FormData) {
     status_note: String(formData.get("status_note") ?? "").trim() || null,
     featured: formData.get("featured") === "on",
     sort_order: Number.parseInt(String(formData.get("sort_order") ?? "0"), 10) || 0,
-    cover_url: String(formData.get("cover_url") ?? "").trim() || null,
+    cover_url: coverUrl,
     cover_alt: String(formData.get("cover_alt") ?? "").trim() || null,
+    hero_url: heroUrl,
+    hero_alt: String(formData.get("hero_alt") ?? "").trim() || null,
+    screenshots: shots,
     seo_description: String(formData.get("seo_description") ?? "").trim() || null,
     problem: String(formData.get("problem") ?? "").trim() || null,
     users: {

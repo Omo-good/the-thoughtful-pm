@@ -17,13 +17,13 @@ export function ContactPanel({ initialService, fallbackEmail, services }: Contac
     : undefined;
   return (
     <div>
-      <p className="mb-4 min-h-6 rounded-md text-sm" aria-live="polite">
-        {selected ? (
-          <span className="block rounded-md border border-teal/40 bg-paper p-4">
+      {selected ? (
+        <p className="mb-6 rounded-md text-sm" aria-live="polite">
+          <span className="block border border-gold/40 bg-paper p-4">
             You&apos;re enquiring about <span className="font-medium">{selected.name}</span>.
           </span>
-        ) : null}
-      </p>
+        </p>
+      ) : null}
       <ContactForm initialService={selected?.enquiryValue ?? ""} fallbackEmail={fallbackEmail} />
     </div>
   );

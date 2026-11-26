@@ -9,7 +9,6 @@ export const primaryNavigation: NavItem[] = [
   { label: "Services", href: "/services" },
   { label: "Work", href: "/work" },
   { label: "Insights", href: "/insights" },
-  { label: "Contact", href: "/contact" },
 ];
 
 export const headerCta: NavItem = { label: "Work With Me", href: "/contact" };
