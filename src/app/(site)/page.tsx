@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { buildMetadata } from "@/lib/metadata";
 import { siteConfig } from "@/data/site-config";
-import { getPortraits } from "@/lib/back-office";
+import { getPortraits, getProjects } from "@/lib/back-office";
 
 export const metadata: Metadata = buildMetadata({
   title: "The Thoughtful PM | Goodness — Product Manager & Consultant",
@@ -37,6 +37,11 @@ const link = "text-sm text-gold underline underline-offset-8";
 
 export default async function HomePage() {
   const { home: portrait } = await getPortraits();
+  const projects = await getProjects();
+  const coverFor = (slug: string) => projects.find((p) => p.slug === slug)?.cover || null;
+  const everwovenCover = coverFor("everwoven");
+  const prayfirstCover = coverFor("prayfirst");
+  const giftwyzCover = coverFor("giftwyz");
   return (
     <main id="main" className="flex-1 bg-ivory text-charcoal">
       {/* Hero */}
@@ -136,31 +141,52 @@ export default async function HomePage() {
         <div className="grid gap-7 md:grid-cols-[7fr_5fr] md:gap-7">
           <Link
             href="/work/everwoven"
-            className="relative flex min-h-[360px] flex-col justify-end bg-[linear-gradient(160deg,#E8D9BE_0%,#B8935A_100%)] p-8 text-charcoal md:h-[700px] md:p-10"
+            className={`relative flex min-h-[360px] flex-col justify-end overflow-hidden bg-[linear-gradient(160deg,#E8D9BE_0%,#B8935A_100%)] p-8 md:h-[700px] md:p-10 ${everwovenCover ? "text-ivory" : "text-charcoal"}`}
           >
-            <span className="mb-3.5 text-[11px] uppercase tracking-[0.3em] opacity-80">Relationships · Product Lead</span>
-            <span className="font-display text-5xl leading-none md:text-[64px]">Everwoven</span>
-            <span className="mt-3.5 max-w-[520px] text-[15px] leading-[1.6] opacity-90">A courtship and marriage ecosystem for intentional relationships.</span>
-            <span className="mt-5 text-[13px] underline underline-offset-[6px]">Read the case study →</span>
+            {everwovenCover ? (
+              <>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={everwovenCover} alt="" className="absolute inset-0 h-full w-full object-cover" />
+                <span className="absolute inset-0 bg-gradient-to-t from-[#1C1813]/85 via-[#1C1813]/30 to-transparent" />
+              </>
+            ) : null}
+            <span className="relative z-10 mb-3.5 text-[11px] uppercase tracking-[0.3em] opacity-80">Relationships · Product Lead</span>
+            <span className="relative z-10 font-display text-5xl leading-none md:text-[64px]">Everwoven</span>
+            <span className="relative z-10 mt-3.5 max-w-[520px] text-[15px] leading-[1.6] opacity-90">A courtship and marriage ecosystem for intentional relationships.</span>
+            <span className="relative z-10 mt-5 text-[13px] underline underline-offset-[6px]">Read the case study →</span>
           </Link>
           <div className="grid gap-7">
             <Link
               href="/work/prayfirst"
-              className="relative flex min-h-[300px] flex-col justify-end bg-[#2B2116] p-8 text-ivory md:h-[336px] md:p-10"
+              className="relative flex min-h-[300px] flex-col justify-end overflow-hidden bg-[#2B2116] p-8 text-ivory md:h-[336px] md:p-10"
             >
-              <span className="mb-3.5 text-[11px] uppercase tracking-[0.3em] opacity-80">Wellbeing · Product Lead</span>
-              <span className="font-display text-[40px] leading-none">PrayFirst</span>
-              <span className="mt-3.5 max-w-[520px] text-[15px] leading-[1.6] opacity-90">A prayer habit app that asks for a pause before other apps open.</span>
-              <span className="mt-5 text-[13px] underline underline-offset-[6px]">Read the case study →</span>
+              {prayfirstCover ? (
+                <>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={prayfirstCover} alt="" className="absolute inset-0 h-full w-full object-cover" />
+                  <span className="absolute inset-0 bg-gradient-to-t from-[#1C1813]/85 via-[#1C1813]/30 to-transparent" />
+                </>
+              ) : null}
+              <span className="relative z-10 mb-3.5 text-[11px] uppercase tracking-[0.3em] opacity-80">Wellbeing · Product Lead</span>
+              <span className="relative z-10 font-display text-[40px] leading-none">PrayFirst</span>
+              <span className="relative z-10 mt-3.5 max-w-[520px] text-[15px] leading-[1.6] opacity-90">A prayer habit app that asks for a pause before other apps open.</span>
+              <span className="relative z-10 mt-5 text-[13px] underline underline-offset-[6px]">Read the case study →</span>
             </Link>
             <Link
               href="/work/giftwyz"
-              className="relative flex min-h-[300px] flex-col justify-end bg-[linear-gradient(160deg,#EFE6D4,#DCC9A6)] p-8 text-charcoal md:h-[336px] md:p-10"
+              className={`relative flex min-h-[300px] flex-col justify-end overflow-hidden bg-[linear-gradient(160deg,#EFE6D4,#DCC9A6)] p-8 md:h-[336px] md:p-10 ${giftwyzCover ? "text-ivory" : "text-charcoal"}`}
             >
-              <span className="mb-3.5 text-[11px] uppercase tracking-[0.3em] opacity-80">Gifting · Product Manager</span>
-              <span className="font-display text-[40px] leading-none">Giftwyz</span>
-              <span className="mt-3.5 max-w-[520px] text-[15px] leading-[1.6] opacity-90">A digital gifting platform with a vendor portal.</span>
-              <span className="mt-5 text-[13px] underline underline-offset-[6px]">Read the case study →</span>
+              {giftwyzCover ? (
+                <>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={giftwyzCover} alt="" className="absolute inset-0 h-full w-full object-cover" />
+                  <span className="absolute inset-0 bg-gradient-to-t from-[#1C1813]/85 via-[#1C1813]/30 to-transparent" />
+                </>
+              ) : null}
+              <span className="relative z-10 mb-3.5 text-[11px] uppercase tracking-[0.3em] opacity-80">Gifting · Product Manager</span>
+              <span className="relative z-10 font-display text-[40px] leading-none">Giftwyz</span>
+              <span className="relative z-10 mt-3.5 max-w-[520px] text-[15px] leading-[1.6] opacity-90">A digital gifting platform with a vendor portal.</span>
+              <span className="relative z-10 mt-5 text-[13px] underline underline-offset-[6px]">Read the case study →</span>
             </Link>
           </div>
         </div>
